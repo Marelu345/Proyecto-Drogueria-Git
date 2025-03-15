@@ -1,7 +1,7 @@
 package DAO;
 
 import Conexion.ConexionDB;
-import Clase.Cliente;
+import Clases.Cliente;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
