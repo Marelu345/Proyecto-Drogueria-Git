@@ -1,4 +1,4 @@
-package Clase;
+package Clases;
 
 public class Cliente {
     int id;
