@@ -1,6 +1,6 @@
 package GUI;
 import DAO.ClienteDAO;
-import Clase.Cliente;
+import Clases.Cliente;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
