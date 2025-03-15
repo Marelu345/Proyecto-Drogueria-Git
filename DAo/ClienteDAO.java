@@ -1,4 +1,4 @@
-package DAO;
+package DAo;
 
 import Conexion.ConexionDB;
 import Clase.Cliente;
