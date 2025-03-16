@@ -4,8 +4,10 @@ import Clases.Producto;
 import DAO.ProductoDAO;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class VentanaProducto {
     private JPanel main;
@@ -20,12 +22,31 @@ public class VentanaProducto {
     private ProductoDAO productoDAO = new ProductoDAO();
 
     public VentanaProducto() {
+        obtenerProductos();
         button1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 agregarProducto();
 
             }
         });
+    }
+    public void obtenerProductos() {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID");
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Descripción");
+        modelo.addColumn("Tipo");
+        modelo.addColumn("Precio");
+        modelo.addColumn("Stock");
+        modelo.addColumn("Stock Mínimo");
+
+        table1.setModel(modelo);
+
+        List<Producto> productos = productoDAO.obtenerProductos();
+        while (!productos.isEmpty()) {
+            Producto p   = productos.remove(0);
+            modelo.addRow(new Object[]{p.getIdProducto(), p.getNombre(), p.getDescripcion(), p.getTipo(), p.getPrecio(), p.getStock(), p.getStockMinimo()});
+        }
     }
 
     public void agregarProducto() {
