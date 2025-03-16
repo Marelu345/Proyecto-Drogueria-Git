@@ -13,6 +13,7 @@ public class VentanaClientes {
     private JButton button1;
     private JPanel main;
     private JButton button2;
+    private JButton button3;
     private ClienteDAO clienteDAO = new ClienteDAO();
     int filaSeleccionada;
 
@@ -32,6 +33,16 @@ public class VentanaClientes {
             }
 
         });
+
+        button3.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                eliminarCliente();
+
+            }
+
+
+        });
+
 
         table1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -83,6 +94,25 @@ public class VentanaClientes {
             JOptionPane.showMessageDialog(null, "Seleccione un cliente de la tabla.");
         }
     }
+    public void eliminarCliente() {
+        int selectedRow = table1.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(null, "Seleccione un cliente para eliminar.");
+            return;
+        }
+
+        String id = table1.getValueAt(selectedRow, 0).toString();
+        if (clienteDAO.eliminarCliente(id)) {
+            JOptionPane.showMessageDialog(null, "Cliente eliminado exitosamente.");
+            obtenerClientes();
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al eliminar cliente.");
+        }
+    }
+
+
+
+
 
 
     public void ejecutar() {

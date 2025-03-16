@@ -59,6 +59,24 @@ public class ClienteDAO {
             return false;
         }
     }
+    public boolean eliminarCliente(String id) {
+        String deleteCliente = "DELETE FROM cliente WHERE id_cliente=?";
+        try (Connection conexion = ConexionDB.getConnection();
+             PreparedStatement psCliente = conexion.prepareStatement(deleteCliente)) {
+            psCliente.setString(1, id);
+            return psCliente.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+
+
+
+
+
 }
 
 
