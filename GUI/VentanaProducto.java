@@ -8,16 +8,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class VentanaProducto {
-    public JPanel main;
-    public JTable table1;
-    public JTextField textField1;
-    public JTextField textField2;
-    public JTextField textField3;
-    public JTextField textField4;
-    public JTextField textField5;
-    public JTextField textField6;
-    public JButton button1;
-    public ProductoDAO productoDAO = new ProductoDAO();
+    private JPanel main;
+    private JTable table1;
+    private JTextField textField1;
+    private JTextField textField2;
+    private JTextField textField3;
+    private JTextField textField4;
+    private JTextField textField5;
+    private JTextField textField6;
+    private JButton button1;
+    private ProductoDAO productoDAO = new ProductoDAO();
 
     public VentanaProducto() {
         button1.addActionListener(new ActionListener() {

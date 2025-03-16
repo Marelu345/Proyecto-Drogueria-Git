@@ -5,8 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class VentanaPrincipal {
-    public JButton button1;
-    public JButton button2;
+    private JButton button1;
+    private JButton button2;
     private JPanel main;
     private JButton button3;
 
