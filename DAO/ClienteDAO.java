@@ -8,9 +8,9 @@ import java.util.List;
 
 public class ClienteDAO {
     public boolean agregarCliente(Cliente cliente) {
-        String query = "INSERT INTO cliente (Nombre, Cedula, Email, Telefono) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO cliente (Nombre, Cedula, Email, Telefono) VALUES (?, ?, ?, ?)";
         try (Connection conexion = ConexionDB.getConnection();
-             PreparedStatement stmt = conexion.prepareStatement(query)) {
+             PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, cliente.getNombre());
             stmt.setString(2, cliente.getCedula());
             stmt.setString(3, cliente.getCorreo());
@@ -44,7 +44,7 @@ public class ClienteDAO {
     }
 
     public boolean actualizarCliente(Cliente cliente)   {
-        String sql = "UPDATE cliente SET nombre=?, Cedula=?,  Email=?, Telefono=? WHERE id_cliente=?";
+        String sql = "UPDATE cliente SET Nombre=?, Cedula=?,  Email=?, Telefono=? WHERE id_cliente=?";
         try (Connection conexion = ConexionDB.getConnection();
 
         PreparedStatement statement = conexion.prepareStatement(sql)) {

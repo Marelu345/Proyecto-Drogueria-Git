@@ -8,6 +8,7 @@ public class VentanaPrincipal {
     public JButton button1;
     public JButton button2;
     private JPanel main;
+    private JButton button3;
 
     public VentanaPrincipal() {
         button1.addActionListener(new ActionListener() {
@@ -21,6 +22,13 @@ public class VentanaPrincipal {
         button2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
+            }
+        });
+
+        button3.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                VentanaProducto ventanaProducto = new VentanaProducto();
+                ventanaProducto.ejecutar();
             }
         });
 
