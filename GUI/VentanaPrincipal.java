@@ -14,7 +14,7 @@ public class VentanaPrincipal {
         button1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 VentanaClientes ventanaClientes = new VentanaClientes();
-                ventanaClientes.ejecutar();
+                ventanaClientes.main(null);
             }
         });
 
@@ -28,23 +28,19 @@ public class VentanaPrincipal {
         button3.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 VentanaProducto ventanaProducto = new VentanaProducto();
-                ventanaProducto.ejecutar();
+                ventanaProducto.main(null);
             }
         });
 
     }
 
-    public void ejecutar() {
-        JFrame frame = new JFrame("Sistema de Farmacia");
-        frame.setContentPane(this.main);
-        frame.pack();
-        frame.setSize(600, 400);
-        frame.setResizable(false);
-        frame.setVisible(true);
-    }
-
     public static void main(String[] args) {
-        VentanaPrincipal ventana = new VentanaPrincipal();
-        ventana.ejecutar();
+        JFrame frame = new JFrame("Farmacia");
+        frame.setContentPane(new VentanaPrincipal().main);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setSize(500, 500);
+        frame.setResizable(true);
+        frame.setVisible(true);
     }
 }

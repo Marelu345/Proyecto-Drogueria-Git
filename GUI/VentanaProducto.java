@@ -57,12 +57,14 @@ public class VentanaProducto {
         }
     }
 
-    public void ejecutar() {
-        JFrame frame = new JFrame("Gestión de Productos");
-        frame.setContentPane(this.main);
-        frame.pack();
-        frame.setSize(600, 400);
-        frame.setResizable(false);
+    public static void main(String[] args) {
+        VentanaProducto ventana = new VentanaProducto();
+        JFrame frame = new JFrame("Productos");
+        frame.setContentPane(ventana.main);
+        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600, 500);
+        frame.setResizable(true);
         frame.setVisible(true);
+        ventana.obtenerProductos();
     }
 }

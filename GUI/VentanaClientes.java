@@ -58,6 +58,7 @@ public class VentanaClientes {
     }
 
     public void obtenerClientes() {
+        List<Cliente> clientes = clienteDAO.obtenerClientes();
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("ID");
         modelo.addColumn("Cédula");
@@ -67,11 +68,10 @@ public class VentanaClientes {
 
         table1.setModel(modelo);
 
-        List<Cliente> clientes = clienteDAO.obtenerClientes();
-        if (!clientes.isEmpty()) {
-            Cliente cliente = clientes.get(0);
+
+        while (!clientes.isEmpty()) {
+            Cliente cliente = clientes.remove(0);
             modelo.addRow(new Object[]{cliente.getId(), cliente.getCedula(), cliente.getNombre(), cliente.getCorreo(), cliente.getTelefono()});
-            clientes.remove(0);
         }
     }
 
@@ -115,12 +115,14 @@ public class VentanaClientes {
 
 
 
-    public void ejecutar() {
+    public static void main(String[] args) {
+        VentanaClientes ventana = new VentanaClientes();
         JFrame frame = new JFrame("Clientes");
-        frame.setContentPane(this.main);
-        frame.pack();
-        frame.setSize(600, 400);
-        frame.setResizable(false);
+        frame.setContentPane(ventana.main);
+        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600, 500);
+        frame.setResizable(true);
         frame.setVisible(true);
+        ventana.obtenerClientes();
     }
 }
