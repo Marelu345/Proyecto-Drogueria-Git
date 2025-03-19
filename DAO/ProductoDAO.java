@@ -50,4 +50,35 @@ public class ProductoDAO {
         }
         return productos;
     }
+
+    public boolean actualizarProducto(Producto producto)   {
+        String query = "UPDATE producto SET Nombre = ?, Descripcion = ? , Precio_U = ?, Stock = ?, Stock_M = ?, Tipo = ? WHERE id_producto = ?";
+        try (Connection conexion = ConexionDB.getConnection();
+
+             PreparedStatement statement = conexion.prepareStatement(query)) {
+            statement.setString(1, producto.getNombre());
+            statement.setString(2, producto.getDescripcion());
+            statement.setDouble(3, producto.getPrecio());
+            statement.setInt(4, producto.getStock());
+            statement.setInt(5, producto.getStockMinimo());
+            statement.setString(6, producto.getTipo());
+            statement.setInt(7, producto.getIdProducto());
+
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean eliminarProducto(String id) {
+        String proctE = "DELETE FROM producto WHERE id_producto =?";
+        try (Connection conexion = ConexionDB.getConnection();
+             PreparedStatement stmt = conexion.prepareStatement(proctE)) {
+            stmt.setString(1, id);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

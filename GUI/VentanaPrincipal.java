@@ -9,6 +9,7 @@ public class VentanaPrincipal {
     private JButton button2;
     private JPanel main;
     private JButton button3;
+    private JButton ventanaPedidoButton;
 
     public VentanaPrincipal() {
         button1.addActionListener(new ActionListener() {
@@ -32,6 +33,13 @@ public class VentanaPrincipal {
             }
         });
 
+        ventanaPedidoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                VentanaPedido ventanaPedido = new VentanaPedido();
+                ventanaPedido.main();
+            }
+        });
     }
 
     public static void main(String[] args) {

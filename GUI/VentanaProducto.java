@@ -19,17 +19,48 @@ public class VentanaProducto {
     private JTextField textField5;
     private JTextField textField6;
     private JButton button1;
+    private JButton actualizarProductoButton;
+    private JButton eliminarProductoButton;
     private ProductoDAO productoDAO = new ProductoDAO();
-
+    int filas;
     public VentanaProducto() {
         obtenerProductos();
         button1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 agregarProducto();
+                obtenerProductos();
 
             }
         });
+        actualizarProductoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                actualizarProducto();
+                obtenerProductos();
+            }
+        });
+        eliminarProductoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                eliminarProducto();
+                obtenerProductos();
+            }
+        });
+        table1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                filas = table1.getSelectedRow();
+                if (filas >= 0) {
+                    textField1.setText(table1.getValueAt(filas, 1).toString());
+                    textField2.setText(table1.getValueAt(filas, 2).toString());
+                    textField3.setText(table1.getValueAt(filas, 3).toString());
+                    textField4.setText(table1.getValueAt(filas, 4).toString());
+                    textField5.setText(table1.getValueAt(filas, 5).toString());
+                    textField6.setText(table1.getValueAt(filas, 6).toString());
+                }
+            }
+        });
     }
+
     public void obtenerProductos() {
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("ID");
@@ -54,6 +85,32 @@ public class VentanaProducto {
         );
         if (productoDAO.agregarProducto(nuevoProducto)) {
             JOptionPane.showMessageDialog(null, "Producto agregado.");
+        }
+    }
+    public void actualizarProducto() {
+        if (filas >= 0) {
+            int id = (int) table1.getValueAt(filas, 0);
+            Producto productoA = new Producto(id, textField1.getText(), textField2.getText(), textField3.getText(), Double.parseDouble(textField4.getText()), Integer.parseInt(textField5.getText()), Integer.parseInt(textField6.getText()));
+            if (productoDAO.actualizarProducto(productoA)) {
+                JOptionPane.showMessageDialog(null, "Producto actualizado.");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccione un producto de la tabla.");
+        }
+    }
+    public void eliminarProducto() {
+        int selectedRow = table1.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(null, "Seleccione un producto para eliminar.");
+            return;
+        }
+
+        String id = table1.getValueAt(selectedRow, 0).toString();
+        if (productoDAO.eliminarProducto(id)) {
+            JOptionPane.showMessageDialog(null, "Producto eliminado exitosamente.");
+            obtenerProductos();
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al eliminar producto.");
         }
     }
 
