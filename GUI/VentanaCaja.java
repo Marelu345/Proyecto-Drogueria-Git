@@ -1,4 +1,6 @@
-package DAO;
+package GUI;
+
+import DAO.CajaDAO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
