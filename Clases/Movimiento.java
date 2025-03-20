@@ -1,5 +1,6 @@
 package Clases;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class Movimiento {
@@ -51,8 +52,8 @@ public class Movimiento {
         this.monto = monto;
     }
 
-    public Date getFecha() {
-        return fecha;
+    public Timestamp getFecha() {
+        return (Timestamp) fecha;
     }
 
     public void setFecha(Date fecha) {
