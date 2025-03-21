@@ -34,7 +34,7 @@ public class VentanaPedido {
     public VentanaPedido(){
         disponible.setEditable(false);
         obtenerCombobox();
-        obtenerDatos();
+        //obtenerDatos();
         pedirButton.addActionListener(new ActionListener() {@Override
         public void actionPerformed(ActionEvent e) {
             VentanaPedido.nombreProducto nombreProducto = new VentanaPedido.nombreProducto();
@@ -54,7 +54,7 @@ public class VentanaPedido {
                 {
                     JOptionPane.showMessageDialog(null, "Pedido creado con exito");
                     pedidoDAO.actualizar(pedido);
-                    obtenerDatos();
+                  //  obtenerDatos();
 
 
                 }
@@ -65,7 +65,7 @@ public class VentanaPedido {
 
             //textField.setText("");
 
-            obtenerDatos();
+            //obtenerDatos();
         }});
 
 
@@ -77,13 +77,13 @@ public class VentanaPedido {
                 {
                     JOptionPane.showMessageDialog(null, "Pedido eliminado con exito");
                 }
-                obtenerDatos();
+              //  obtenerDatos();
 
             }
         });
 
 
-        table1.addMouseListener(new MouseAdapter() {
+        /*table1.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
@@ -101,7 +101,7 @@ public class VentanaPedido {
 
 
             }
-        });
+        });*/
 
         comboBox1.addActionListener(new ActionListener() {
             @Override
@@ -226,7 +226,7 @@ public class VentanaPedido {
         frame.setContentPane(new VentanaPedido().main);
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setSize(900, 600);
+        frame.setSize(600, 600);
         frame.setResizable(true);
         frame.setVisible(true);
 
