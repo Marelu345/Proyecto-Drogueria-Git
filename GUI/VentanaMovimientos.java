@@ -13,14 +13,12 @@ import java.util.List;
 public class VentanaMovimientos extends JFrame {
     public JPanel main;
     public JTable table1;
-    public JButton button1;
     private JButton eliminarButton;
     private MovimientoDAO movimientoDAO;
 
     public VentanaMovimientos() {
         movimientoDAO = new MovimientoDAO();
 
-        button1.addActionListener(e -> ((JFrame) SwingUtilities.getWindowAncestor(main)).dispose());
 
 
 
