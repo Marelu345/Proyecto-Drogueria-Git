@@ -10,6 +10,7 @@ public class VentanaPrincipal {
     private JPanel main;
     private JButton button3;
     private JButton ventanaPedidoButton;
+    private JButton ventanaMovimientoButton;
 
     public VentanaPrincipal() {
         button1.addActionListener(new ActionListener() {
@@ -38,6 +39,14 @@ public class VentanaPrincipal {
             public void actionPerformed(ActionEvent e) {
                 VentanaPedido ventanaPedido = new VentanaPedido();
                 ventanaPedido.main();
+            }
+        });
+        ventanaMovimientoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                VentanaMovimientos ventana = new VentanaMovimientos();
+
+
             }
         });
     }
