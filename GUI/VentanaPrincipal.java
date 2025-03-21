@@ -44,7 +44,8 @@ public class VentanaPrincipal {
         ventanaMovimientoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                VentanaMovimientos ventana = new VentanaMovimientos();
+                VentanaMovimientos ventanaMovimientos = new VentanaMovimientos();
+                ventanaMovimientos.main(null);
 
 
             }
