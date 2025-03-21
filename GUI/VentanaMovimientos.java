@@ -14,10 +14,6 @@ public class VentanaMovimientos extends JFrame {
     public JPanel main;
     public JTable table1;
     public JButton button1;
-    private JTextField tipoTextField;
-    private JTextField categoriaTextField;
-    private JTextField montoTextField;
-    private JButton actualizarButton;
     private JButton eliminarButton;
     private MovimientoDAO movimientoDAO;
 
@@ -26,15 +22,6 @@ public class VentanaMovimientos extends JFrame {
 
         button1.addActionListener(e -> ((JFrame) SwingUtilities.getWindowAncestor(main)).dispose());
 
-
-        actualizarButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cargarMovimientos();
-
-            }
-        });
 
 
         eliminarButton.addActionListener(new ActionListener() {
