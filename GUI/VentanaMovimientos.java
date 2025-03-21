@@ -17,7 +17,6 @@ public class VentanaMovimientos extends JFrame {
     private JTextField tipoTextField;
     private JTextField categoriaTextField;
     private JTextField montoTextField;
-    private JButton button2;
     private JButton actualizarButton;
     private JButton eliminarButton;
     private MovimientoDAO movimientoDAO;
@@ -73,27 +72,6 @@ public class VentanaMovimientos extends JFrame {
             modelo.addRow(new Object[]{movimiento.getId(), movimiento.getTipo(), movimiento.getCategoria(), movimiento.getMonto(), movimiento.getFecha()});
         }
 
-    }
-    public void actualizarMovimiento() {
-        int filaSeleccionada = table1.getSelectedRow();
-        if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(null, "Seleccione un movimiento para actualizar.");
-            return;
-        }
-
-        int id = (int) table1.getValueAt(filaSeleccionada, 0);
-        String tipo = tipoTextField.getText();
-        String categoria = categoriaTextField.getText();
-        double monto = Double.parseDouble(montoTextField.getText());
-
-        Movimiento movimiento = new Movimiento(id, tipo, categoria, monto, new java.util.Date());
-
-        if (MovimientoDAO.actualizarMovimiento(movimiento)) {
-            JOptionPane.showMessageDialog(null, "Movimiento actualizado correctamente.");
-            cargarMovimientos();
-        } else {
-            JOptionPane.showMessageDialog(null, "Error al actualizar el movimiento.");
-        }
     }
 
     public void eliminarMovimiento() {
