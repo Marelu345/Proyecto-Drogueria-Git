@@ -11,6 +11,7 @@ public class VentanaPrincipal {
     private JButton button3;
     private JButton ventanaPedidoButton;
     private JButton ventanaMovimientoButton;
+    private JButton ventanaCajaButton;
 
     public VentanaPrincipal() {
         button1.addActionListener(new ActionListener() {
@@ -46,6 +47,15 @@ public class VentanaPrincipal {
             public void actionPerformed(ActionEvent e) {
                 VentanaMovimientos ventanaMovimientos = new VentanaMovimientos();
                 ventanaMovimientos.main(null);
+
+
+            }
+        });
+        ventanaCajaButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                VentanaCaja ventanaCaja = new VentanaCaja();
+                ventanaCaja.main(null);
 
 
             }
