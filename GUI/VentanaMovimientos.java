@@ -31,7 +31,6 @@ public class VentanaMovimientos extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                actualizarMovimiento();
                 cargarMovimientos();
 
             }
