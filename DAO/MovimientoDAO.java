@@ -2,7 +2,6 @@ package DAO;
 
 import Clases.Movimiento;
 import Conexion.ConexionDB;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,20 +28,64 @@ public class MovimientoDAO {
         return movimientos;
     }
 
+    public boolean registrarMovimiento(Movimiento movimiento) {
+        String sql = "INSERT INTO movimiento (tipo, categoria, monto) VALUES (?, ?, ?)";
+
+        try {
+            Connection conexion = ConexionDB.getConnection();
+            PreparedStatement stmt = conexion.prepareStatement(sql);
+
+            stmt.setString(1, movimiento.getTipo());
+            stmt.setString(2, movimiento.getCategoria());
+            stmt.setDouble(3, movimiento.getMonto());
+
+            boolean registrado = stmt.executeUpdate() > 0;
 
 
+            if (registrado) {
+                CajaDAO.actualizarSaldoAutomatico(movimiento.getMonto(), movimiento.getTipo());
+            }
+
+            return registrado;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     public static boolean eliminarMovimiento(int id) {
-        String sql = "DELETE FROM movimiento WHERE id_movimiento=?";
+        String sqlD = "DELETE FROM movimiento WHERE id_movimiento=?";
+        String sqlS = "SELECT Monto, Tipo FROM movimiento WHERE id_movimiento=?";
 
         try (Connection conexion = ConexionDB.getConnection();
-             PreparedStatement stmt = conexion.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            return stmt.executeUpdate() > 0;
+             PreparedStatement stmtD = conexion.prepareStatement(sqlD);
+             PreparedStatement stmtS = conexion.prepareStatement(sqlS)){
+
+            stmtS.setInt(1, id);
+            ResultSet rs = stmtS.executeQuery();
+
+            if (rs.next()) {
+                double monto = rs.getDouble("Monto");
+                String tipo = rs.getString("Tipo");
+
+                stmtD.setInt(1, id);
+                boolean eliminado = stmtD.executeUpdate() > 0;
+
+                if (eliminado) {
+                    if (tipo.equals("Ingreso")) {
+                            CajaDAO.actualizarSaldoAutomatico(-monto, "Ingreso");
+                    }else if (tipo.equals("Egreso")) {
+                        CajaDAO.actualizarSaldoAutomatico(monto, "Ingreso");
+                    }
+                }
+                return eliminado;
+            }
         }
         catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
+        return false;
+
     }
 }

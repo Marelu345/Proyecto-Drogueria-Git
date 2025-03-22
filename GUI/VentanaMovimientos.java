@@ -3,7 +3,6 @@ package GUI;
 
 import Clases.Movimiento;
 import DAO.MovimientoDAO;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
@@ -14,12 +13,29 @@ public class VentanaMovimientos extends JFrame {
     public JPanel main;
     public JTable table1;
     private JButton eliminarButton;
+    private JButton button2;
+    private JTextField textField1;
+    private JComboBox comboBox1;
+    private JComboBox comboBox2;
     private MovimientoDAO movimientoDAO;
 
     public VentanaMovimientos() {
         movimientoDAO = new MovimientoDAO();
+        cargarMovimientos();
 
+        comboBox1.addItem("Ingreso");
+        comboBox1.addItem("Egreso");
 
+        comboBox2.addItem("Venta");
+        comboBox2.addItem("Compra de insumos");
+
+        button2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                registrarMovimiento();
+            }
+
+        });
 
 
         eliminarButton.addActionListener(new ActionListener() {
@@ -28,20 +44,32 @@ public class VentanaMovimientos extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 eliminarMovimiento();
 
-
-
             }
         });
     }
+    public void registrarMovimiento() {
+        String tipo = comboBox1.getSelectedItem().toString();
+        String categoria = comboBox2.getSelectedItem().toString();
+        double monto = 0;
 
-    public void cargarMovimientos() {
-        List<Movimiento> movimientos = movimientoDAO.obtenerMovimientos();
-
-        if (movimientos.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No hay movimientos registrados.");
+        try {
+            monto = Double.parseDouble(textField1.getText());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Ingrese un monto válido.");
             return;
         }
+        Movimiento movimiento = new Movimiento(0, tipo, categoria, monto, null);
 
+        if (movimientoDAO.registrarMovimiento(movimiento)) {
+            JOptionPane.showMessageDialog(this, "Movimiento registrado exitosamente.");
+            cargarMovimientos();
+        }else {
+            JOptionPane.showMessageDialog(this, "Error al registrar el movimiento.");
+        }
+
+    }
+    public void cargarMovimientos() {
+        List<Movimiento> movimientos = movimientoDAO.obtenerMovimientos();
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("ID");
         modelo.addColumn("Tipo");
@@ -69,7 +97,7 @@ public class VentanaMovimientos extends JFrame {
 
         int confirmacion = JOptionPane.showConfirmDialog(null, "¿Seguro que desea eliminar este movimiento?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
         if (confirmacion == JOptionPane.YES_OPTION) {
-            if (MovimientoDAO.eliminarMovimiento(id)) {
+            if (movimientoDAO.eliminarMovimiento(id)) {
                 JOptionPane.showMessageDialog(null, "Movimiento eliminado correctamente.");
                 cargarMovimientos();
             } else {

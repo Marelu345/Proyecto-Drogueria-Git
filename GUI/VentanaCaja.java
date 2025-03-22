@@ -6,23 +6,21 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class VentanaCaja {
-    public JPanel main;
-    public JTable table1;
-    private JButton button1;
+    private JPanel main;
+    private JTable table1;
     private CajaDAO cajaDAO;
 
     public VentanaCaja() {
         cajaDAO = new CajaDAO();
-        button1.addActionListener(e -> ((JFrame) SwingUtilities.getWindowAncestor(main)).dispose());
         cargarSaldo();
     }
 
     public void cargarSaldo() {
-        double saldo = cajaDAO.obtenerSaldo();
+        Object[] datos = cajaDAO.obtenerSaldo();
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("ID Caja");
         modelo.addColumn("Saldo Actual");
-        modelo.addRow(new Object[]{1, saldo});
+        modelo.addRow(datos);
         table1.setModel(modelo);
     }
 
