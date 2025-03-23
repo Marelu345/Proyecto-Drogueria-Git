@@ -17,6 +17,7 @@ public class VentanaMovimientos extends JFrame {
     private JTextField textField1;
     private JComboBox comboBox1;
     private JComboBox comboBox2;
+    private JButton actualizarButton;
     private MovimientoDAO movimientoDAO;
 
     public VentanaMovimientos() {
@@ -43,6 +44,14 @@ public class VentanaMovimientos extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 eliminarMovimiento();
+
+            }
+        });
+        actualizarButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                actualizarMovimiento();
 
             }
         });
@@ -84,6 +93,29 @@ public class VentanaMovimientos extends JFrame {
             modelo.addRow(new Object[]{movimiento.getId(), movimiento.getTipo(), movimiento.getCategoria(), movimiento.getMonto(), movimiento.getFecha()});
         }
 
+    }
+
+    public void actualizarMovimiento() {
+        int filaSeleccionada = table1.getSelectedRow();
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(null, "Seleccione un movimiento para actualizar.");
+            return;
+        }
+
+        int id = (int) table1.getValueAt(filaSeleccionada, 0);
+        double monto = Double.parseDouble(textField1.getText());
+        String tipo = comboBox1.getSelectedItem().toString();
+        String categoria = comboBox2.getSelectedItem().toString();
+
+
+        Movimiento movimiento = new Movimiento(id, tipo, categoria, monto, new java.util.Date());
+
+        if (MovimientoDAO.actualizarMovimiento(movimiento)) {
+            JOptionPane.showMessageDialog(null, "Movimiento actualizado correctamente.");
+            cargarMovimientos();
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al actualizar el movimiento.");
+        }
     }
 
     public void eliminarMovimiento() {
