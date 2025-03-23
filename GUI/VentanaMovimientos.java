@@ -134,6 +134,7 @@ public class VentanaMovimientos extends JFrame {
             JOptionPane.showMessageDialog(null, "Error al eliminar el movimiento.");
         }
     }
+
     public static void main(String[] args) {
         VentanaMovimientos ventana = new VentanaMovimientos();
         JFrame frame = new JFrame("Movimientos");
