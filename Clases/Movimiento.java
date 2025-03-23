@@ -18,7 +18,8 @@ public class Movimiento {
         this.fecha = fecha;
     }
 
-    public Movimiento() {}
+    public Movimiento() {
+    }
 
     public int getId() {
         return id;
@@ -52,11 +53,13 @@ public class Movimiento {
         this.monto = monto;
     }
 
-    public Timestamp getFecha() {
-        return (Timestamp) fecha;
+    public Date getFecha() {
+        return fecha;
     }
 
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
+
+
 }

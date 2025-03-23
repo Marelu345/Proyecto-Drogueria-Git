@@ -53,6 +53,25 @@ public class MovimientoDAO {
         }
     }
 
+
+
+    public static boolean actualizarMovimiento(Movimiento movimiento)   {
+        String sql = "UPDATE movimiento SET Tipo=?, Categoria=?,  Monto=?, fecha=? WHERE id_movimiento=?";
+        try (Connection conexion = ConexionDB.getConnection();
+
+             PreparedStatement statement = conexion.prepareStatement(sql)) {
+            statement.setString(1, movimiento.getTipo());
+            statement.setString(2, movimiento.getCategoria());
+            statement.setDouble(3, movimiento.getMonto());
+            statement.setTimestamp(4, (Timestamp) movimiento.getFecha());
+            statement.setInt(5, movimiento.getId());
+            return statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public static boolean eliminarMovimiento(int id) {
         String sqlD = "DELETE FROM movimiento WHERE id_movimiento=?";
         String sqlS = "SELECT Monto, Tipo FROM movimiento WHERE id_movimiento=?";
