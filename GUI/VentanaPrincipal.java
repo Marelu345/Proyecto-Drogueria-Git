@@ -63,7 +63,7 @@ public class VentanaPrincipal {
     }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Farmacia");
+        JFrame frame = new JFrame("Administracion de Farmacia");
         frame.setContentPane(new VentanaPrincipal().main);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
