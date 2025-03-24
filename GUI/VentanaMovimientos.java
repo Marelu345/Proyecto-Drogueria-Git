@@ -38,15 +38,6 @@ public class VentanaMovimientos extends JFrame {
 
         });
 
-
-        eliminarButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                eliminarMovimiento();
-
-            }
-        });
         actualizarButton.addActionListener(new ActionListener() {
 
             @Override
@@ -55,95 +46,124 @@ public class VentanaMovimientos extends JFrame {
 
             }
         });
+
+
+        eliminarButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                eliminarMovimiento();
+
+
+            }
+        });
     }
-    public void registrarMovimiento() {
-        String tipo = comboBox1.getSelectedItem().toString();
-        String categoria = comboBox2.getSelectedItem().toString();
-        double monto = 0;
 
-        try {
-            monto = Double.parseDouble(textField1.getText());
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Ingrese un monto válido.");
-            return;
+
+
+
+        public void registrarMovimiento () {
+            String tipo = comboBox1.getSelectedItem().toString();
+            String categoria = comboBox2.getSelectedItem().toString();
+            double monto = 0;
+
+            try {
+                monto = Double.parseDouble(textField1.getText());
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Ingrese un monto válido.");
+                return;
+            }
+            Movimiento movimiento = new Movimiento(0, tipo, categoria, monto, null);
+
+            if (movimientoDAO.registrarMovimiento(movimiento)) {
+                JOptionPane.showMessageDialog(this, "Movimiento registrado exitosamente.");
+                cargarMovimientos();
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al registrar el movimiento.");
+            }
+
         }
-        Movimiento movimiento = new Movimiento(0, tipo, categoria, monto, null);
+        public void cargarMovimientos () {
+            List<Movimiento> movimientos = movimientoDAO.obtenerMovimientos();
+            DefaultTableModel modelo = new DefaultTableModel();
+            modelo.addColumn("ID");
+            modelo.addColumn("Tipo");
+            modelo.addColumn("Categoría");
+            modelo.addColumn("Monto");
+            modelo.addColumn("Fecha");
 
-        if (movimientoDAO.registrarMovimiento(movimiento)) {
-            JOptionPane.showMessageDialog(this, "Movimiento registrado exitosamente.");
-            cargarMovimientos();
-        }else {
-            JOptionPane.showMessageDialog(this, "Error al registrar el movimiento.");
+            table1.setModel(modelo);
+
+            while (!movimientos.isEmpty()) {
+                Movimiento movimiento = movimientos.remove(0);
+                modelo.addRow(new Object[]{movimiento.getId(), movimiento.getTipo(), movimiento.getCategoria(), movimiento.getMonto(), movimiento.getFecha()});
+            }
+
         }
-
-    }
-    public void cargarMovimientos() {
-        List<Movimiento> movimientos = movimientoDAO.obtenerMovimientos();
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("ID");
-        modelo.addColumn("Tipo");
-        modelo.addColumn("Categoría");
-        modelo.addColumn("Monto");
-        modelo.addColumn("Fecha");
-
-        table1.setModel(modelo);
-
-        while (!movimientos.isEmpty()) {
-            Movimiento movimiento = movimientos.remove(0);
-            modelo.addRow(new Object[]{movimiento.getId(), movimiento.getTipo(), movimiento.getCategoria(), movimiento.getMonto(), movimiento.getFecha()});
-        }
-
-    }
 
     public void actualizarMovimiento() {
         int filaSeleccionada = table1.getSelectedRow();
         if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(null, "Seleccione un movimiento para actualizar.");
+            JOptionPane.showMessageDialog(null, "Seleccione un movimiento para actualizar.", "Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        int id = (int) table1.getValueAt(filaSeleccionada, 0);
+        String montoTexto = textField1.getText().trim();
+        if (montoTexto.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Ingrese un monto válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        double monto;
+        try {
+            monto = Double.parseDouble(montoTexto);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "El monto debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        int id = (int) table1.getValueAt(filaSeleccionada, 0);
-        double monto = Double.parseDouble(textField1.getText());
-        String tipo = comboBox1.getSelectedItem().toString();
-        String categoria = comboBox2.getSelectedItem().toString();
-
+        String tipo = (String) comboBox1.getSelectedItem();
+        String categoria = (String) comboBox2.getSelectedItem();
 
         Movimiento movimiento = new Movimiento(id, tipo, categoria, monto, new java.util.Date());
 
-        if (MovimientoDAO.actualizarMovimiento(movimiento)) {
-            JOptionPane.showMessageDialog(null, "Movimiento actualizado correctamente.");
+        MovimientoDAO.actualizarMovimiento(movimiento);
+        cargarMovimientos();
+
+        if (movimientoDAO.actualizarMovimiento(movimiento)) {
+            JOptionPane.showMessageDialog(null, "Movimiento actualizado exitosamente.");
             cargarMovimientos();
         } else {
-            JOptionPane.showMessageDialog(null, "Error al actualizar el movimiento.");
+            JOptionPane.showMessageDialog(null, "Error al actaulizar el movimiento.");
         }
     }
 
-    public void eliminarMovimiento() {
-        int filaSeleccionada = table1.getSelectedRow();
-        if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(null, "Seleccione un movimiento para eliminar.");
-            return;
+        public void eliminarMovimiento () {
+            int filaSeleccionada = table1.getSelectedRow();
+            if (filaSeleccionada == -1) {
+                JOptionPane.showMessageDialog(null, "Seleccione un movimiento para eliminar.");
+                return;
+            }
+
+            int id = (int) table1.getValueAt(filaSeleccionada, 0);
+
+            if (movimientoDAO.eliminarMovimiento(id)) {
+                JOptionPane.showMessageDialog(null, "Movimiento eliminado exitosamente.");
+                cargarMovimientos();
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al eliminar el movimiento.");
+            }
         }
 
-        int id = (int) table1.getValueAt(filaSeleccionada, 0);
-
-        if (movimientoDAO.eliminarMovimiento(id)) {
-            JOptionPane.showMessageDialog(null, "Movimiento eliminado exitosamente.");
-            cargarMovimientos();
-        } else {
-            JOptionPane.showMessageDialog(null, "Error al eliminar el movimiento.");
+        public static void main (String[]args){
+            VentanaMovimientos ventana = new VentanaMovimientos();
+            JFrame frame = new JFrame("Movimientos");
+            frame.setContentPane(ventana.main);
+            // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(600, 500);
+            frame.setResizable(true);
+            frame.setVisible(true);
+            ventana.cargarMovimientos();
         }
-    }
 
-    public static void main(String[] args) {
-        VentanaMovimientos ventana = new VentanaMovimientos();
-        JFrame frame = new JFrame("Movimientos");
-        frame.setContentPane(ventana.main);
-        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 500);
-        frame.setResizable(true);
-        frame.setVisible(true);
-        ventana.cargarMovimientos();
     }
-}
 
