@@ -13,7 +13,7 @@ public class ClienteDAO {
              PreparedStatement stmt = conexion.prepareStatement(sql)) {
             stmt.setString(1, cliente.getNombre());
             stmt.setString(2, cliente.getCedula());
-            stmt.setString(3, cliente.getCorreo());
+            stmt.setString(3, cliente.getEmail());
             stmt.setString(4, cliente.getTelefono());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -42,6 +42,32 @@ public class ClienteDAO {
         }
         return clientes;
     }
+    public Cliente obtenerUltimoCliente() {
+        Cliente cliente = null;
+        String sql = "SELECT * FROM cliente ORDER BY id_cliente DESC LIMIT 1";
+
+        try (Connection connection = ConexionDB.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet resultSets = preparedStatement.executeQuery()) {
+
+            if (resultSets.next()) {
+                cliente = new Cliente(
+                        resultSets.getInt("id_cliente"),
+                        resultSets.getString("Nombre"),
+                        resultSets.getString("cedula"),
+                        resultSets.getString("Email"),
+                        resultSets.getString("telefono")
+                );
+            }
+            resultSets.close();
+            preparedStatement.close();
+            connection.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cliente;
+    }
 
     public boolean actualizarCliente(Cliente cliente)   {
         String sql = "UPDATE cliente SET Nombre=?, Cedula=?,  Email=?, Telefono=? WHERE id_cliente=?";
@@ -50,7 +76,7 @@ public class ClienteDAO {
         PreparedStatement statement = conexion.prepareStatement(sql)) {
             statement.setString(1, cliente.getNombre());
             statement.setString(2, cliente.getCedula());
-            statement.setString(3, cliente.getCorreo());
+            statement.setString(3, cliente.getEmail());
             statement.setString(4, cliente.getTelefono());
             statement.setInt(5, cliente.getId());
             return statement.executeUpdate() > 0;
@@ -70,13 +96,6 @@ public class ClienteDAO {
             return false;
         }
     }
-
-
-
-
-
-
-
 }
 
 
