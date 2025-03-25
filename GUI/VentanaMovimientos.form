@@ -21,14 +21,6 @@
           </component>
         </children>
       </scrollpane>
-      <component id="c9b11" class="javax.swing.JButton" binding="eliminarButton" default-binding="true">
-        <constraints>
-          <grid row="9" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-        </constraints>
-        <properties>
-          <text value="Eliminar"/>
-        </properties>
-      </component>
       <component id="b1db6" class="javax.swing.JButton" binding="button2">
         <constraints>
           <grid row="7" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -85,12 +77,20 @@
           <model/>
         </properties>
       </component>
-      <component id="b97f5" class="javax.swing.JButton" binding="actualizarButton" default-binding="true">
+      <component id="e224c" class="javax.swing.JButton" binding="actualizarButton" default-binding="true">
         <constraints>
           <grid row="8" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>
         <properties>
           <text value="Actualizar"/>
+        </properties>
+      </component>
+      <component id="4e4b" class="javax.swing.JButton" binding="eliminarButton">
+        <constraints>
+          <grid row="9" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Eliminar"/>
         </properties>
       </component>
     </children>
