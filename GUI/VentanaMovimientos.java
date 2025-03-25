@@ -17,6 +17,7 @@ public class VentanaMovimientos extends JFrame {
     private JTextField textField1;
     private JComboBox comboBox1;
     private JComboBox comboBox2;
+    private JButton actualizarButton;
     private MovimientoDAO movimientoDAO;
 
     public VentanaMovimientos() {
@@ -36,6 +37,14 @@ public class VentanaMovimientos extends JFrame {
             }
 
         });
+        actualizarButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                actualizarMovimiento();
+
+            }
+        });
 
 
         eliminarButton.addActionListener(new ActionListener() {
@@ -47,6 +56,10 @@ public class VentanaMovimientos extends JFrame {
             }
         });
     }
+
+
+
+
     public void registrarMovimiento() {
         String tipo = comboBox1.getSelectedItem().toString();
         String categoria = comboBox2.getSelectedItem().toString();
@@ -86,6 +99,42 @@ public class VentanaMovimientos extends JFrame {
 
     }
 
+    public void actualizarMovimiento() {
+        int filaSeleccionada = table1.getSelectedRow();
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(null, "Seleccione un movimiento para actualizar.", "Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int id = (int) table1.getValueAt(filaSeleccionada, 0);
+        String montoTexto = textField1.getText().trim();
+
+        if (montoTexto.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Ingrese un monto válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        double monto;
+        try {
+            monto = Double.parseDouble(montoTexto);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "El monto debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String tipo = (String) comboBox1.getSelectedItem();
+        String categoria = (String) comboBox2.getSelectedItem();
+
+        Movimiento movimiento = new Movimiento(id, tipo, categoria, monto, new java.util.Date());
+
+        MovimientoDAO.actualizarMovimiento(movimiento);
+        cargarMovimientos();
+
+
+
+    }
+
+
     public void eliminarMovimiento() {
         int filaSeleccionada = table1.getSelectedRow();
         if (filaSeleccionada == -1) {
@@ -95,16 +144,14 @@ public class VentanaMovimientos extends JFrame {
 
         int id = (int) table1.getValueAt(filaSeleccionada, 0);
 
-        int confirmacion = JOptionPane.showConfirmDialog(null, "¿Seguro que desea eliminar este movimiento?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
-        if (confirmacion == JOptionPane.YES_OPTION) {
-            if (movimientoDAO.eliminarMovimiento(id)) {
-                JOptionPane.showMessageDialog(null, "Movimiento eliminado correctamente.");
-                cargarMovimientos();
-            } else {
-                JOptionPane.showMessageDialog(null, "Error al eliminar el movimiento.");
-            }
+        if (movimientoDAO.eliminarMovimiento(id)) {
+            JOptionPane.showMessageDialog(null, "Movimiento eliminado exitosamente.");
+            cargarMovimientos();
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al eliminar el movimiento.");
         }
     }
+
 
     public static void main(String[] args) {
         VentanaMovimientos ventana = new VentanaMovimientos();
