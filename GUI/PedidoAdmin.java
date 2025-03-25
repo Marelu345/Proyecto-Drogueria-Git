@@ -67,6 +67,7 @@ public class PedidoAdmin {
                 }
             }
         });
+
         eliminarEstadoButton.addActionListener(new ActionListener() {
 
             @Override
@@ -135,6 +136,8 @@ public class PedidoAdmin {
             e.printStackTrace();
         }
     }
+
+
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Pedidos");
