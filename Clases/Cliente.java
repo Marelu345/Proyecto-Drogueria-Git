@@ -2,13 +2,13 @@ package Clases;
 
 public class Cliente {
     int id;
-    String nombre,cedula,correo,telefono;
+    String nombre,cedula,email,telefono;
 
-    public Cliente(int id, String nombre, String cedula, String correo, String telefono) {
+    public Cliente(int id, String nombre, String cedula, String email, String telefono) {
         this.id = id;
         this.nombre = nombre;
         this.cedula = cedula;
-        this.correo = correo;
+        this.email = email;
         this.telefono = telefono;
     }
 
@@ -38,12 +38,12 @@ public class Cliente {
         this.cedula = cedula;
     }
 
-    public String getCorreo() {
-        return correo;
+    public String getEmail() {
+        return email;
     }
 
-    public void setCorreo(String correo) {
-        this.correo = correo;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getTelefono() {
