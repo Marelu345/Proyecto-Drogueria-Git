@@ -184,25 +184,6 @@ public class VentanaPedido {
     }
 
 
-    /*public void obtenerID() {
-
-        Connection con = conexion.getConnection();
-
-        try
-        {
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT MAX(ordenes.id_orden) FROM ordenes");
-
-            while (rs.next()){
-                id_venta = rs.getInt(1);
-            }
-
-        } catch (SQLException e){
-            throw new RuntimeException(e);
-        }
-
-    }*/
-
     class nombreProducto{
         private int id_producto;
         private String nombre, disponibilidad;
