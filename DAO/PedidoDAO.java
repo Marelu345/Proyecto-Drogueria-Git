@@ -105,7 +105,7 @@ public class PedidoDAO {
     /**
      * Cambia el estado de un pedido dependiendo de su estado actual.
      * Si el pedido ya está en "Entregado", pues no se hace ningún cambio.
-     * Depronto esto es útil para evitar actualizar pedidos que ya finalizaron.
+     * Esto es útil para evitar actualizar pedidos que ya finalizaron.
      *
      * @param id_pedido El ID del pedido que se quiere actualizar.
      * @param estadoActual El estado actual del pedido.
