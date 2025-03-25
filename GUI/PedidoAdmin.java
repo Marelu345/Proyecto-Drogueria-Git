@@ -11,8 +11,9 @@ import java.util.List;
 
 public class PedidoAdmin {
     private JTable table;
-    private JButton button1;
+    private JButton button2;
     private JPanel main;
+    private JButton eliminarEstadoButton;
     private PedidoDAO pedidoDAO = new PedidoDAO();
 
 
@@ -22,7 +23,7 @@ public class PedidoAdmin {
      */
     public PedidoAdmin() {
         obtenerDatos();
-        button1.addActionListener(new ActionListener() {
+        button2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 /**
@@ -66,6 +67,14 @@ public class PedidoAdmin {
                 }
             }
         });
+        eliminarEstadoButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                eliminarPedido();
+
+            }
+        });
     }
 
     /**
@@ -100,6 +109,30 @@ public class PedidoAdmin {
         while (!pedidos.isEmpty()) {
             Pedido pedido = pedidos.remove(0);
             modelo.addRow(new Object[]{pedido.getId_pedido(), pedido.getId_venta(), pedido.getSubtotal(), pedido.getTotal(), pedido.getEstado(),pedido.getTipoU()});
+        }
+    }
+
+    public void eliminarPedido() {
+        try {
+            int filaSeleccionada = table.getSelectedRow();
+            if (filaSeleccionada == -1) {
+                JOptionPane.showMessageDialog(null, "Selecciona un pedido para eliminar.");
+                return;
+            }
+
+            int id_pedido = (int) table.getValueAt(filaSeleccionada, 0);
+            boolean eliminado = pedidoDAO.eliminar(id_pedido);
+
+            if (eliminado) {
+                JOptionPane.showMessageDialog(null, "Pedido eliminado correctamente.");
+                obtenerDatos();
+            } else {
+                JOptionPane.showMessageDialog(null, "Error al eliminar el pedido.");
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Ocurrió un error al eliminar el pedido.", "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }
 
