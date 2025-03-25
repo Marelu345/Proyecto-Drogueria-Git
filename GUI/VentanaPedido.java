@@ -73,7 +73,7 @@ public class VentanaPedido {
 
                 if (pedidoDAO.eliminar(id_pedido))
                 {
-                    JOptionPane.showMessageDialog(null, "Pedido eliminado con exito");
+                    JOptionPane.showMessageDialog(null, "Pedido Cancelado con exito");
                 }
               //  obtenerDatos();
 
@@ -121,15 +121,9 @@ public class VentanaPedido {
 
         DefaultTableModel modelo = new DefaultTableModel();
 
-        modelo.addColumn("Id_pedido");
-        modelo.addColumn("Id_venta");
         modelo.addColumn("Nombre Producto");
         modelo.addColumn("Tipo de Unidad");
-        modelo.addColumn("SubTotal");
-        modelo.addColumn("Precio Total");
-
-
-
+        modelo.addColumn("Cantidad");
 
         table1.setModel(modelo);
 
@@ -139,15 +133,12 @@ public class VentanaPedido {
         try
         {
             Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT id_pedido, id_venta, producto.Nombre AS id_producto,pedido.TipoU,pedido.Subtotal,Total FROM pedido JOIN producto ON pedido.id_producto = producto.id_producto;");
+            ResultSet rs = stmt.executeQuery("SELECT producto.Nombre AS id_producto,pedido.TipoU FROM pedido JOIN producto ON pedido.id_producto = producto.id_producto;");
 
             while (rs.next()){
                 dato[0] = rs.getString(1);
                 dato[1] = rs.getString(2);
                 dato[2] = rs.getString(3);
-                dato[3] = rs.getString(4);
-                dato[4] = rs.getString(5);
-                dato[5] = rs.getString(6);
 
 
                 modelo.addRow(dato);
