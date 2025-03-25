@@ -8,8 +8,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,9 +18,10 @@ public class VentanaPedido {
     private JComboBox comboBox2;
     private JPanel main;
     private JTextField disponible;
-    private JButton pedirButton;
+    private JButton agregarButton;
     private JTable table1;
     private JButton eliminarButton;
+    private JButton pedirButton;
 
     private ConexionDB conexion = new ConexionDB();
 
@@ -32,10 +31,9 @@ public class VentanaPedido {
     int id_venta, id_pedido;
 
     public VentanaPedido(){
-        disponible.setEditable(false);
         obtenerCombobox();
-        //obtenerDatos();
-        pedirButton.addActionListener(new ActionListener() {@Override
+        obtenerDatos();
+        agregarButton.addActionListener(new ActionListener() {@Override
         public void actionPerformed(ActionEvent e) {
             VentanaPedido.nombreProducto nombreProducto = new VentanaPedido.nombreProducto();
             String dispo = disponible.getText();
@@ -107,6 +105,13 @@ public class VentanaPedido {
             @Override
             public void actionPerformed(ActionEvent e) {
                 VentanaPedido.nombreProducto nombreProducto = (VentanaPedido.nombreProducto) comboBox1.getSelectedItem();
+            }
+        });
+        pedirButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                VentanaVenta ventanaVenta = new VentanaVenta();
+                ventanaVenta.main();
             }
         });
     }
@@ -221,12 +226,14 @@ public class VentanaPedido {
             return  nombre;
         }
     }
+
+
     public static void main() {
         JFrame frame = new JFrame("Pedidos");
         frame.setContentPane(new VentanaPedido().main);
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setSize(600, 600);
+        frame.setSize(900, 600);
         frame.setResizable(true);
         frame.setVisible(true);
 
