@@ -113,6 +113,15 @@ public class PedidoAdmin {
         }
     }
 
+
+    /**
+     * Elimina un pedido seleccionado de la tabla.
+     * Si no hay una fila seleccionada, muestra un mensaje de advertencia.
+     * Si la eliminación es exitosa, actualiza la tabla con los datos actualizados.
+     * En caso de error, muestra un mensaje de error y registra la excepción en la consola.
+     */
+
+
     public void eliminarPedido() {
         try {
             int filaSeleccionada = table.getSelectedRow();

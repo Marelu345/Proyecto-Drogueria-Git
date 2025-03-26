@@ -69,6 +69,11 @@ public class ClienteDAO {
         return cliente;
     }
 
+
+
+///**
+// * Actualiza la información de un cliente en la base de datos.
+
     public boolean actualizarCliente(Cliente cliente)   {
         String sql = "UPDATE cliente SET Nombre=?, Cedula=?,  Email=?, Telefono=? WHERE id_cliente=?";
         try (Connection conexion = ConexionDB.getConnection();
@@ -85,6 +90,12 @@ public class ClienteDAO {
             return false;
         }
     }
+
+
+
+///**
+// * Elimina un cliente de la base de datos basado en su ID.
+
     public boolean eliminarCliente(String id) {
         String deleteCliente = "DELETE FROM cliente WHERE id_cliente=?";
         try (Connection conexion = ConexionDB.getConnection();

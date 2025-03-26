@@ -83,6 +83,11 @@ public class VentanaClientes {
     }
 
 
+    /**
+     * Actualiza la información de un cliente seleccionado en la tabla.
+     * Si no se ha seleccionado una fila, muestra un mensaje de advertencia.
+     */
+
     public void actualizarCliente() {
         if (filaSeleccionada >= 0) {
             int id = (int) table1.getValueAt(filaSeleccionada, 0);
@@ -94,6 +99,14 @@ public class VentanaClientes {
             JOptionPane.showMessageDialog(null, "Seleccione un cliente de la tabla.");
         }
     }
+
+    /**
+     * Elimina un cliente seleccionado de la tabla.
+     * Si no se ha seleccionado ninguna fila, muestra un mensaje de advertencia.
+     * Si la eliminación es exitosa, actualiza la lista de clientes en la tabla.
+     */
+
+
     public void eliminarCliente() {
         int selectedRow = table1.getSelectedRow();
         if (selectedRow == -1) {

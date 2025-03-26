@@ -5,6 +5,8 @@ import Conexion.ConexionDB;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
+
 
 public class MovimientoDAO {
     public List<Movimiento> obtenerMovimientos() {
@@ -53,6 +55,15 @@ public class MovimientoDAO {
         }
     }
 
+
+
+
+
+
+
+
+
+
     public static boolean actualizarMovimiento(Movimiento movimiento) {
         String sql = "SELECT Tipo, Monto FROM movimiento WHERE id_movimiento=?";
 
@@ -79,22 +90,19 @@ public class MovimientoDAO {
                 if (actualizado) {
                     double ajuste = 0;
 
+
                     if (tipoAnterior.equals(movimiento.getTipo())) {
-                        // Si el tipo de movimiento es el mismo, solo ajustar la diferencia de montos
                         ajuste = movimiento.getMonto() - montoAnterior;
                     } else {
-                        // Si el tipo de movimiento cambia, primero revertimos el monto anterior
-                        ajuste = (tipoAnterior.equals("Ingreso") ? -montoAnterior : montoAnterior);
 
-                        // Luego aplicamos el nuevo monto correctamente
-                        ajuste += (movimiento.getTipo().equals("Ingreso") ? movimiento.getMonto() : -movimiento.getMonto());
+                        ajuste = tipoAnterior.equals("Ingreso") ? -montoAnterior : montoAnterior;
+                        ajuste += movimiento.getTipo().equals("Ingreso") ? movimiento.getMonto() : -movimiento.getMonto();
                     }
 
-                    // Aplicar el ajuste en la caja
+
                     CajaDAO.actualizarSaldoAutomatico(ajuste, movimiento.getTipo());
+
                 }
-
-
 
                 return actualizado;
             }
@@ -105,11 +113,7 @@ public class MovimientoDAO {
         return false;
     }
 
-
-
-
-
-    public static boolean eliminarMovimiento(int id) {
+    public  boolean eliminarMovimiento(int id) {
         String sqlD = "DELETE FROM movimiento WHERE id_movimiento=?";
         String sqlS = "SELECT Monto, Tipo FROM movimiento WHERE id_movimiento=?";
 
