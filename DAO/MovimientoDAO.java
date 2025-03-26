@@ -54,24 +54,60 @@ public class MovimientoDAO {
     }
 
     public static boolean actualizarMovimiento(Movimiento movimiento) {
-        String sql = "UPDATE movimiento SET Tipo=?, Categoria=?, Monto=?, fecha=? WHERE id_movimiento=?";
-        try (Connection conexion = ConexionDB.getConnection()) {
+        String sql = "SELECT Tipo, Monto FROM movimiento WHERE id_movimiento=?";
 
-            PreparedStatement statement = conexion.prepareStatement(sql);
-            statement.setString(1, movimiento.getTipo());
-            statement.setString(2, movimiento.getCategoria());
-            statement.setDouble(3, movimiento.getMonto());
-            statement.setTimestamp(4, new Timestamp(movimiento.getFecha().getTime()));
-            statement.setInt(5, movimiento.getId());
+        try (Connection conexion = ConexionDB.getConnection();
+             PreparedStatement stmtSelect = conexion.prepareStatement(sql)) {
 
-            return statement.executeUpdate() > 0;
+            stmtSelect.setInt(1, movimiento.getId());
+            ResultSet rs = stmtSelect.executeQuery();
+
+            if (rs.next()) {
+                String tipoAnterior = rs.getString("Tipo");
+                double montoAnterior = rs.getDouble("Monto");
+
+                String sqlUpdate = "UPDATE movimiento SET Tipo=?, Categoria=?, Monto=?, fecha=? WHERE id_movimiento=?";
+                PreparedStatement stmtUpdate = conexion.prepareStatement(sqlUpdate);
+                stmtUpdate.setString(1, movimiento.getTipo());
+                stmtUpdate.setString(2, movimiento.getCategoria());
+                stmtUpdate.setDouble(3, movimiento.getMonto());
+                stmtUpdate.setTimestamp(4, new java.sql.Timestamp(movimiento.getFecha().getTime()));
+                stmtUpdate.setInt(5, movimiento.getId());
+
+                boolean actualizado = stmtUpdate.executeUpdate() > 0;
+
+                if (actualizado) {
+                    double ajuste = 0;
+
+                    if (tipoAnterior.equals(movimiento.getTipo())) {
+                        // Si el tipo de movimiento es el mismo, solo ajustar la diferencia de montos
+                        ajuste = movimiento.getMonto() - montoAnterior;
+                    } else {
+                        // Si el tipo de movimiento cambia, primero revertimos el monto anterior
+                        ajuste = (tipoAnterior.equals("Ingreso") ? -montoAnterior : montoAnterior);
+
+                        // Luego aplicamos el nuevo monto correctamente
+                        ajuste += (movimiento.getTipo().equals("Ingreso") ? movimiento.getMonto() : -movimiento.getMonto());
+                    }
+
+                    // Aplicar el ajuste en la caja
+                    CajaDAO.actualizarSaldoAutomatico(ajuste, movimiento.getTipo());
+                }
+
+
+
+                return actualizado;
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            System.err.println("Error al actualizar movimiento: " + e.getMessage());
-            return false;
         }
+        return false;
     }
+
+
+
+
 
     public static boolean eliminarMovimiento(int id) {
         String sqlD = "DELETE FROM movimiento WHERE id_movimiento=?";

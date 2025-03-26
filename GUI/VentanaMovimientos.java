@@ -2,6 +2,7 @@ package GUI;
 
 
 import Clases.Movimiento;
+import DAO.CajaDAO;
 import DAO.MovimientoDAO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -114,25 +115,22 @@ public class VentanaMovimientos extends JFrame {
             return;
         }
 
-        double monto;
-        try {
-            monto = Double.parseDouble(montoTexto);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "El monto debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
+        double monto = Double.parseDouble(montoTexto);
         String tipo = (String) comboBox1.getSelectedItem();
         String categoria = (String) comboBox2.getSelectedItem();
 
         Movimiento movimiento = new Movimiento(id, tipo, categoria, monto, new java.util.Date());
 
-        MovimientoDAO.actualizarMovimiento(movimiento);
-        cargarMovimientos();
+        if (MovimientoDAO.actualizarMovimiento(movimiento)) {
+            JOptionPane.showMessageDialog(null, "Movimiento actualizado correctamente.");
+            cargarMovimientos(); // Recarga la tabla
+            CajaDAO.actualizarSaldoAutomatico(movimiento.getMonto(), movimiento.getTipo());
 
-
-
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al actualizar el movimiento.");
+        }
     }
+
 
 
     public void eliminarMovimiento() {
