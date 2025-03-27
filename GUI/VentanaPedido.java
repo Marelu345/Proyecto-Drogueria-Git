@@ -5,6 +5,8 @@ import Conexion.ConexionDB;
 import DAO.PedidoDAO;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,72 +14,49 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class VentanaPedido {
     private JComboBox comboBox1;
-    private JComboBox comboBox2;
     private JPanel main;
-    private JTextField disponible;
     private JButton agregarButton;
     private JTable table1;
+    private JTextField cantidad;
+    private JTextField textFieldBuscar;
+    private JComboBox comboBox2;
     private JButton eliminarButton;
     private JButton pedirButton;
 
     private ConexionDB conexion = new ConexionDB();
-
-    private PedidoDAO pedidoDAO = new PedidoDAO();
-
-    int filas;
-    int id_venta, id_pedido;
+    private ArrayList<NombreProducto> productos = new ArrayList<>();
+    private DefaultTableModel modeloTabla;
 
     public VentanaPedido(){
-        obtenerCombobox();
-        obtenerDatos();
-        agregarButton.addActionListener(new ActionListener() {@Override
-        public void actionPerformed(ActionEvent e) {
-            VentanaPedido.nombreProducto nombreProducto = new VentanaPedido.nombreProducto();
-            String dispo = disponible.getText();
-            if(dispo.equals("Disponible")){
+        cargarProductos();
+        configurarTabla();
 
-                VentanaPedido.nombreProducto prod = (VentanaPedido.nombreProducto) comboBox1.getSelectedItem();
+        textFieldBuscar.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) { filtrarProductos(); }
+            @Override
+            public void removeUpdate(DocumentEvent e) { filtrarProductos(); }
+            @Override
+            public void changedUpdate(DocumentEvent e) { filtrarProductos(); }
+        });
 
-                int id_producto = prod.getId_producto();
-                //int cantidad = Integer.parseInt(textField4.getText());
-
-
-                Pedido pedido = new Pedido(0,id_venta, 0,0,"estado","");
-
-
-                if (pedidoDAO.agregar(pedido))
-                {
-                    JOptionPane.showMessageDialog(null, "Pedido creado con exito");
-                    pedidoDAO.actualizar(pedido);
-                  //  obtenerDatos();
-
-
-                }
-            }else
-                JOptionPane.showMessageDialog(null, "Producto no Disponible");
-
-
-
-            //textField.setText("");
-
-            //obtenerDatos();
-        }});
+        agregarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                agregarProductoATabla();
+            }
+        });
 
 
         eliminarButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {;
-
-                if (pedidoDAO.eliminar(id_pedido))
-                {
-                    JOptionPane.showMessageDialog(null, "Pedido Cancelado con exito");
-                }
-              //  obtenerDatos();
-
+            public void actionPerformed(ActionEvent e) {;eliminarProductoDeTabla();
             }
+
         });
 
 
@@ -101,12 +80,6 @@ public class VentanaPedido {
             }
         });*/
 
-        comboBox1.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                VentanaPedido.nombreProducto nombreProducto = (VentanaPedido.nombreProducto) comboBox1.getSelectedItem();
-            }
-        });
         pedirButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -115,9 +88,68 @@ public class VentanaPedido {
             }
         });
     }
+    public void configurarTabla() {
+        modeloTabla = new DefaultTableModel(new Object[]{"Producto", "Tipo Unidad", "Cantidad"}, 0);
+        table1.setModel(modeloTabla);
+    }
 
+    public void agregarProductoATabla() {
+        NombreProducto productoSeleccionado = (NombreProducto) comboBox1.getSelectedItem();
+        String tipoUnidad = (String) comboBox2.getSelectedItem();
+        String cantidadTexto = cantidad.getText().trim();
 
-    public void obtenerDatos() {
+        if (productoSeleccionado == null || tipoUnidad == null || cantidadTexto.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos");
+            return;
+        }
+
+        int cantidadNum;
+        try {
+            cantidadNum = Integer.parseInt(cantidadTexto);
+            if (cantidadNum <= 0) {
+                JOptionPane.showMessageDialog(null, "La cantidad debe ser mayor a 0");
+                return;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Ingrese un número válido en cantidad");
+            return;
+        }
+
+        modeloTabla.addRow(new Object[]{productoSeleccionado.getNombre(), tipoUnidad, cantidadNum});
+    }
+    public void eliminarProductoDeTabla() {
+        int filaSeleccionada = table1.getSelectedRow();
+        if (filaSeleccionada >= 0) {
+            modeloTabla.removeRow(filaSeleccionada);
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccione un producto de la tabla para eliminar");
+        }
+    }
+    public void cargarProductos() {
+        Connection con = conexion.getConnection();
+        try {
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT id_producto, nombre FROM producto");
+            productos.clear();
+            while (rs.next()) {
+                productos.add(new NombreProducto(rs.getInt("id_producto"), rs.getString("nombre")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public void filtrarProductos() {
+        String texto = textFieldBuscar.getText().toLowerCase();
+        comboBox1.removeAllItems();
+        for (NombreProducto prod : productos) {
+            if (prod.getNombre().toLowerCase().contains(texto)) {
+                comboBox1.addItem(prod);
+            }
+        }
+    }
+
+    /*public void obtenerDatos() {
 
         DefaultTableModel modelo = new DefaultTableModel();
 
@@ -153,9 +185,10 @@ public class VentanaPedido {
 
 
     }
+     */
 
 
-    public void obtenerCombobox() {
+    /*public void obtenerCombobox() {
 
         Connection con = conexion.getConnection();
 
@@ -172,27 +205,20 @@ public class VentanaPedido {
             throw new RuntimeException(e);
         }
 
-    }
+    }*/
 
 
-    class nombreProducto{
+    class NombreProducto{
         private int id_producto;
-        private String nombre, disponibilidad;
+        private String nombre;
 
-        public  nombreProducto(int id_producto, String nombre){
+        public  NombreProducto(int id_producto, String nombre){
             this.id_producto = id_producto;
             this.nombre = nombre;
-            this.disponibilidad = disponibilidad;
         }
-
-        public nombreProducto() {
-
+        public String getNombre() {
+            return nombre;
         }
-
-        public  int getId_producto(){
-            return  id_producto;
-        }
-
         @Override
         public String toString(){
             return  nombre;
@@ -200,7 +226,7 @@ public class VentanaPedido {
     }
 
 
-    public static void main() {
+    public static void main(String[] args ) {
         JFrame frame = new JFrame("Pedidos");
         frame.setContentPane(new VentanaPedido().main);
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
