@@ -21,6 +21,7 @@ public class VentanaProducto {
     private JButton button1;
     private JButton actualizarProductoButton;
     private JButton eliminarProductoButton;
+    private JComboBox comboBox1;
     private ProductoDAO productoDAO = new ProductoDAO();
     int filas;
     public VentanaProducto() {

@@ -2,7 +2,9 @@ package GUI;
 
 import Clases.Pedido;
 import Conexion.ConexionDB;
+import DAO.DetallePedidoDAO;
 import DAO.PedidoDAO;
+import DAO.ProductoDAO;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -28,6 +30,9 @@ public class VentanaPedido {
     private JButton pedirButton;
 
     private ConexionDB conexion = new ConexionDB();
+    private PedidoDAO pedidoDAO = new PedidoDAO();
+    private ProductoDAO productoDAO = new ProductoDAO();
+    private DetallePedidoDAO detalles = new DetallePedidoDAO();
     private ArrayList<NombreProducto> productos = new ArrayList<>();
     private DefaultTableModel modeloTabla;
 
@@ -59,26 +64,6 @@ public class VentanaPedido {
 
         });
 
-
-        /*table1.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-
-                int selectedRow = table1.getSelectedRow();
-                if (selectedRow != -1) {
-
-                    //textField4.setText(table1.getValueAt(selectedRow, 4).toString()); // Capacidad
-                    comboBox1.setSelectedItem(table1.getValueAt(selectedRow, 1).toString());
-                    comboBox2.setSelectedItem(table1.getValueAt(selectedRow, 2).toString());
-                    id_pedido = Integer.parseInt(table1.getValueAt(selectedRow, 0).toString());
-
-
-                }
-
-
-            }
-        });*/
 
         pedirButton.addActionListener(new ActionListener() {
             @Override
@@ -148,64 +133,6 @@ public class VentanaPedido {
             }
         }
     }
-
-    /*public void obtenerDatos() {
-
-        DefaultTableModel modelo = new DefaultTableModel();
-
-        modelo.addColumn("Nombre Producto");
-        modelo.addColumn("Tipo de Unidad");
-        modelo.addColumn("Cantidad");
-
-        table1.setModel(modelo);
-
-        String[] dato = new String[7];
-        Connection con = conexion.getConnection();
-
-        try
-        {
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT producto.Nombre AS id_producto,pedido.TipoU FROM pedido JOIN producto ON pedido.id_producto = producto.id_producto;");
-
-            while (rs.next()){
-                dato[0] = rs.getString(1);
-                dato[1] = rs.getString(2);
-                dato[2] = rs.getString(3);
-
-
-                modelo.addRow(dato);
-            }
-        }
-
-        catch (SQLException e){
-            e.printStackTrace();
-
-        }
-
-
-
-    }
-     */
-
-
-    /*public void obtenerCombobox() {
-
-        Connection con = conexion.getConnection();
-
-        try
-        {
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT id_producto, nombre FROM producto");
-            while (rs.next()) {
-                int id = rs. getInt("id_producto");
-                String nombre = rs.getString("nombre");
-                comboBox1.addItem(new VentanaPedido.nombreProducto(id,nombre));
-            }
-        } catch (SQLException e){
-            throw new RuntimeException(e);
-        }
-
-    }*/
 
 
     class NombreProducto{

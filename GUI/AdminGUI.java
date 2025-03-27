@@ -3,11 +3,14 @@ package GUI;
 
 import Clases.Admin;
 import Conexion.ConexionDB;
+import Imagenes.Imagenes;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,6 +21,8 @@ public class AdminGUI extends JDialog {
     private JPasswordField textField2;
     private JButton button1;
     private JButton button2;
+    private JLabel logo;
+    private JPanel foto;
     private Connection conexion;
     public Admin admin;
 
@@ -54,6 +59,7 @@ public class AdminGUI extends JDialog {
         });
 
         setVisible(true);
+
     }
 
     public Admin getIdentificarAdmin(String contrasena) {
@@ -89,4 +95,6 @@ public class AdminGUI extends JDialog {
             System.out.println("Identificación cancelada o incorrecta.");
         }
     }
+
+
 }

@@ -67,18 +67,22 @@ public class VentanaMovimientos extends JFrame {
         double monto = 0;
 
         try {
-            monto = Double.parseDouble(textField1.getText());
-        } catch (Exception e) {
+            monto = Double.parseDouble(textField1.getText().trim());
+            if (monto <= 0) {
+                JOptionPane.showMessageDialog(this, "El monto debe ser mayor a 0.");
+                return;
+            }
+            Movimiento movimiento = new Movimiento(0, tipo, categoria, monto, null);
+
+            if (movimientoDAO.registrarMovimiento(movimiento)) {
+                JOptionPane.showMessageDialog(this, "Movimiento registrado exitosamente.");
+                cargarMovimientos();
+            }else {
+                JOptionPane.showMessageDialog(this, "Error al registrar el movimiento.");
+            }
+        } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Ingrese un monto válido.");
             return;
-        }
-        Movimiento movimiento = new Movimiento(0, tipo, categoria, monto, null);
-
-        if (movimientoDAO.registrarMovimiento(movimiento)) {
-            JOptionPane.showMessageDialog(this, "Movimiento registrado exitosamente.");
-            cargarMovimientos();
-        }else {
-            JOptionPane.showMessageDialog(this, "Error al registrar el movimiento.");
         }
 
     }
