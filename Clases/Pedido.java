@@ -1,11 +1,12 @@
 package Clases;
 
 public class Pedido {
-    int id_pedido, id_venta, Subtotal, Total;
+    int id_pedido, id_venta;
+    double Subtotal, Total;
     String 	Estado, TipoU;
 
 
-    public Pedido(int id_pedido, int id_venta, int subtotal, int total, String estado, String tipoU) {
+    public Pedido(int id_pedido, int id_venta, double subtotal, double total, String estado, String tipoU) {
         this.id_pedido = id_pedido;
         this.id_venta = id_venta;
         Subtotal = subtotal;
@@ -30,19 +31,19 @@ public class Pedido {
         this.id_venta = id_venta;
     }
 
-    public int getSubtotal() {
+    public double getSubtotal() {
         return Subtotal;
     }
 
-    public void setSubtotal(int subtotal) {
+    public void setSubtotal(double subtotal) {
         Subtotal = subtotal;
     }
 
-    public int getTotal() {
+    public double getTotal() {
         return Total;
     }
 
-    public void setTotal(int total) {
+    public void setTotal(double total) {
         Total = total;
     }
 

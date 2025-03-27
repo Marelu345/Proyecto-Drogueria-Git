@@ -41,7 +41,7 @@ public class LoginGUI extends JDialog {
                 if (cliente != null) {
                     JOptionPane.showMessageDialog(LoginGUI.this, "Inicio de sesión exitoso", "Bienvenido", JOptionPane.INFORMATION_MESSAGE);
                     dispose();
-                    VentanaPedido.main();
+                    VentanaPedido.main(null);
                 } else {
                     JOptionPane.showMessageDialog(LoginGUI.this, "Nombre o Identificación incorrecta", "Intente otra vez", JOptionPane.ERROR_MESSAGE);
                 }
