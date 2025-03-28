@@ -6,7 +6,17 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * Esta es la clase encargada de manejar las operaciones de base de datos relacionadas con los clientes.
+ * Permite agregar, obtener, actualizar y eliminar clientes en la base de datos.
+ */
 public class ClienteDAO {
+    /**
+     * Agrega un nuevo cliente a la base de datos.
+     * @param cliente Objeto Cliente con los datos a registrar.
+     * @return true si la inserción fue exitosa, false en caso contrario.
+     */
     public boolean agregarCliente(Cliente cliente) {
         String sql = "INSERT INTO cliente (Nombre, Cedula, Email, Telefono) VALUES (?, ?, ?, ?)";
         try (Connection conexion = ConexionDB.getConnection();
@@ -21,7 +31,10 @@ public class ClienteDAO {
             return false;
         }
     }
-
+    /**
+     * Obtiene la lista de todos los clientes registrados en la base de datos.
+     * @return Lista de clientes.
+     */
     public List<Cliente> obtenerClientes() {
         List<Cliente> clientes = new ArrayList<>();
         String sql = "SELECT * FROM cliente";
@@ -42,6 +55,10 @@ public class ClienteDAO {
         }
         return clientes;
     }
+    /**
+     * Obtiene el último cliente registrado en la base de datos.
+     * @return Objeto Cliente con los datos del último cliente.
+     */
     public Cliente obtenerUltimoCliente() {
         Cliente cliente = null;
         String sql = "SELECT * FROM cliente ORDER BY id_cliente DESC LIMIT 1";
