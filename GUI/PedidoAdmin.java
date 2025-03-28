@@ -7,6 +7,12 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.List;
 
 public class PedidoAdmin {
@@ -14,8 +20,14 @@ public class PedidoAdmin {
     private JButton button2;
     private JPanel main;
     private JButton eliminarEstadoButton;
+    private JButton enviarServerButton;
+    private JTextField textField1;
+    private JTextArea AreaServer;
     private PedidoDAO pedidoDAO = new PedidoDAO();
-
+    private ServerSocket serverSocket;
+    private Socket clientSocket;
+    private PrintWriter out;
+    private BufferedReader in;
 
     /**
      * Constructor de la clase PedidoAdmin, pues aquí se llama al metodo para obtener los pedidos.
@@ -23,6 +35,7 @@ public class PedidoAdmin {
      */
     public PedidoAdmin() {
         obtenerDatos();
+        iniciarServidor();
         button2.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -60,8 +73,13 @@ public class PedidoAdmin {
                  * para que se vea reflejado el cambio.
                  */
                 if (actualizado) {
-                    JOptionPane.showMessageDialog(null, "Estado cambiado correctamente.");
                     obtenerDatos();
+
+                    String nuevoEstado = pedidoDAO.obtenerEstado(id_pedido);
+
+                    enviarMensajeCliente("Su pedido #" + id_pedido + " ha sido: " + nuevoEstado);
+
+                    JOptionPane.showMessageDialog(null, "Estado cambiado correctamente.");
                 } else {
                     JOptionPane.showMessageDialog(null, "Error al cambiar el estado.");
                 }
@@ -74,6 +92,20 @@ public class PedidoAdmin {
             public void actionPerformed(ActionEvent e) {
                 eliminarPedido();
 
+            }
+        });
+        enviarServerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (out != null && !textField1.getText().isEmpty()) {
+                    String sendMessage = textField1.getText();
+                    out.println(sendMessage);
+                    AreaServer.append("Servidor: " + sendMessage + "\n");
+                    textField1.setText("");
+                    if (sendMessage.equalsIgnoreCase("salir")) {
+                        cerrarConnections();
+                    }
+                }
             }
         });
     }
@@ -143,6 +175,49 @@ public class PedidoAdmin {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Ocurrió un error al eliminar el pedido.", "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
+        }
+    }
+    public void iniciarServidor() {
+        new Thread(() -> {
+            try {
+                serverSocket = new ServerSocket(12345);
+                AreaServer.append("Servidor iniciado. Esperando cliente...\n");
+                clientSocket = serverSocket.accept();
+                AreaServer.append("Cliente conectado.\n");
+                in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                out = new PrintWriter(clientSocket.getOutputStream(), true);
+                String receiveMessage;
+                while ((receiveMessage = in.readLine()) != null) {
+                    if (receiveMessage.equalsIgnoreCase("salir")) {
+                        AreaServer.append("Cliente ha salido del chat.\n");
+                        break;
+                    }
+                    AreaServer.append("Cliente: " + receiveMessage + "\n");
+                }
+            } catch (IOException e) {
+                AreaServer.append("Error en el servidor: " + e.getMessage() + "\n");
+            } finally {
+                cerrarConnections();
+            }
+        }).start();
+    }
+    public void enviarMensajeCliente(String mensaje) {
+        if (out != null) {
+            out.println(mensaje);
+            AreaServer.append("Notificación enviada al cliente: " + mensaje + "\n");
+        } else {
+            AreaServer.append("No hay clientes conectados para recibir la notificación.\n");
+        }
+    }
+    public void cerrarConnections() {
+        try {
+            if (in != null) in.close();
+            if (out != null) out.close();
+            if (clientSocket != null) clientSocket.close();
+            if (serverSocket != null) serverSocket.close();
+            AreaServer.append("Conexiones cerradas.\n");
+        } catch (IOException e) {
+            AreaServer.append("Error al cerrar conexiones: " + e.getMessage() + "\n");
         }
     }
 

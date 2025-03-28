@@ -1,17 +1,19 @@
 package GUI;
 
-import Clases.Pedido;
-import Conexion.ConexionDB;
-import DAO.DetallePedidoDAO;
-import DAO.PedidoDAO;
-import DAO.ProductoDAO;
 
+import Conexion.ConexionDB;
+import DAO.VentaDAO;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,17 +30,22 @@ public class VentanaPedido {
     private JComboBox comboBox2;
     private JButton eliminarButton;
     private JButton pedirButton;
+    private JTextArea AreaCliente;
+    private JTextField textField1;
+    private JButton enviarMensajeButton;
 
     private ConexionDB conexion = new ConexionDB();
-    private PedidoDAO pedidoDAO = new PedidoDAO();
-    private ProductoDAO productoDAO = new ProductoDAO();
-    private DetallePedidoDAO detalles = new DetallePedidoDAO();
     private ArrayList<NombreProducto> productos = new ArrayList<>();
     private DefaultTableModel modeloTabla;
+    private Socket socket;
+    private PrintWriter out;
+    private BufferedReader in;
+    private VentaDAO ventaDAO = new VentaDAO();
 
     public VentanaPedido(){
         cargarProductos();
         configurarTabla();
+        iniciarChat();
 
         textFieldBuscar.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -70,6 +77,20 @@ public class VentanaPedido {
             public void actionPerformed(ActionEvent e) {
                 VentanaVenta ventanaVenta = new VentanaVenta();
                 ventanaVenta.main();
+            }
+        });
+        enviarMensajeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (out != null && !textField1.getText().isEmpty()) {
+                    String sendMessage = textField1.getText();
+                    out.println(sendMessage);
+                    AreaCliente.append("Cliente: " + sendMessage + "\n");
+                    textField1.setText("");
+                    if (sendMessage.equalsIgnoreCase("salir")) {
+                        cerrarConexion();
+                    }
+                }
             }
         });
     }
@@ -133,6 +154,42 @@ public class VentanaPedido {
             }
         }
     }
+    public void iniciarChat() {
+        new Thread(() -> {
+            String serverAddress = JOptionPane.showInputDialog("Ingresa la IP del servidor (localhost si es local): ");
+            if (serverAddress == null || serverAddress.isEmpty()) serverAddress = "localhost";
+
+            try {
+                socket = new Socket(serverAddress, 12345);
+                AreaCliente.append("Conectado al servidor.\n");
+                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                out = new PrintWriter(socket.getOutputStream(), true);
+
+                String receiveMessage;
+                while ((receiveMessage = in.readLine()) != null) {
+                    if (receiveMessage.equalsIgnoreCase("salir")) {
+                        AreaCliente.append("El servidor ha cerrado la conexión.\n");
+                        break;
+                    }
+                    AreaCliente.append("Servidor: " + receiveMessage + "\n");
+                }
+            } catch (IOException e) {
+                AreaCliente.append("Error al conectar: " + e.getMessage() + "\n");
+            } finally {
+                cerrarConexion();
+            }
+        }).start();
+    }
+    public void cerrarConexion() {
+        try {
+            if (in != null) in.close();
+            if (out != null) out.close();
+            if (socket != null) socket.close();
+            AreaCliente.append("Conexiones cerradas.\n");
+        } catch (IOException e) {
+            AreaCliente.append("Error al cerrar conexiones: " + e.getMessage() + "\n");
+        }
+    }
 
 
     class NombreProducto{
@@ -154,7 +211,7 @@ public class VentanaPedido {
 
 
     public static void main(String[] args ) {
-        JFrame frame = new JFrame("Pedidos");
+        JFrame frame = new JFrame("Pedido Cliente");
         frame.setContentPane(new VentanaPedido().main);
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();

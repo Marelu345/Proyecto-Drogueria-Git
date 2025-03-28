@@ -133,6 +133,21 @@ public class PedidoDAO {
             return false;
         }
     }
+    public String obtenerEstado(int id_pedido) {
+        String estado = "";
+        Connection con = conexion.getConnection();
+        String sql = "SELECT Estado FROM pedido WHERE id_pedido = ?";
+
+        try {
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setInt(1, id_pedido);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) estado = rs.getString("Estado");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return estado;
+    }
 
 
     public boolean eliminar(int id) {
