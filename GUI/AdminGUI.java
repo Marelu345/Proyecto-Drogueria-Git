@@ -22,15 +22,16 @@ public class AdminGUI extends JDialog {
     private JButton button1;
     private JButton button2;
     private JLabel logo;
-    private JPanel foto;
     private Connection conexion;
     public Admin admin;
 
+
     public AdminGUI(JFrame parent) {
+
         super(parent);
         setTitle("Iniciar Administrador");
         setContentPane(main);
-        setMinimumSize(new Dimension(700, 500));
+        setMinimumSize(new Dimension(600, 500));
         setModal(true);
         setLocationRelativeTo(parent);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -95,6 +96,5 @@ public class AdminGUI extends JDialog {
             System.out.println("Identificación cancelada o incorrecta.");
         }
     }
-
 
 }

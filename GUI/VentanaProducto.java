@@ -21,7 +21,6 @@ public class VentanaProducto {
     private JButton button1;
     private JButton actualizarProductoButton;
     private JButton eliminarProductoButton;
-    private JComboBox comboBox1;
     private ProductoDAO productoDAO = new ProductoDAO();
     int filas;
     public VentanaProducto() {
@@ -120,7 +119,7 @@ public class VentanaProducto {
         JFrame frame = new JFrame("Productos");
         frame.setContentPane(ventana.main);
         // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 500);
+        frame.setSize(600, 600);
         frame.setResizable(true);
         frame.setVisible(true);
         ventana.obtenerProductos();
