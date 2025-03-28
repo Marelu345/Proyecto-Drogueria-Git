@@ -88,8 +88,12 @@ public class ClienteDAO {
 
 
 
-///**
-// * Actualiza la información de un cliente en la base de datos.
+
+    /**
+     * Actualiza la información de un cliente en la base de datos.
+     * @param cliente Objeto Cliente con los nuevos datos.
+     * @return true si la actualización fue exitosa, false en caso contrario.
+     */
 
     public boolean actualizarCliente(Cliente cliente)   {
         String sql = "UPDATE cliente SET Nombre=?, Cedula=?,  Email=?, Telefono=? WHERE id_cliente=?";
@@ -110,8 +114,12 @@ public class ClienteDAO {
 
 
 
-///**
-// * Elimina un cliente de la base de datos basado en su ID.
+
+    /**
+     * Elimina un cliente de la base de datos basado en su ID.
+     * @param id Identificador del cliente a eliminar.
+     * @return true si la eliminación fue exitosa, false en caso contrario.
+     */
 
     public boolean eliminarCliente(String id) {
         String deleteCliente = "DELETE FROM cliente WHERE id_cliente=?";
