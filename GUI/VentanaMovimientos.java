@@ -19,6 +19,7 @@ public class VentanaMovimientos extends JFrame {
     private JComboBox comboBox1;
     private JComboBox comboBox2;
     private JButton actualizarButton;
+    private JButton buttonCaja;
     private MovimientoDAO movimientoDAO;
 
     public VentanaMovimientos() {
@@ -37,6 +38,14 @@ public class VentanaMovimientos extends JFrame {
                 registrarMovimiento();
             }
 
+        });
+
+        buttonCaja.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                VentanaCaja ventanaCaja = new VentanaCaja();
+                ventanaCaja.main(null);
+            }
         });
         /**
          * Agrega un ActionListener al boton de actualizar.

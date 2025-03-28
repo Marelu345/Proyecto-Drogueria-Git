@@ -18,7 +18,7 @@ public class VentanaCaja {
     public void cargarSaldo() {
         Object[] datos = cajaDAO.obtenerSaldo();
         DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("ID Caja");
+        modelo.addColumn("Caja");
         modelo.addColumn("Saldo Actual");
         modelo.addRow(datos);
         table1.setModel(modelo);
