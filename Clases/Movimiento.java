@@ -23,6 +23,14 @@ public class Movimiento {
      * @param monto     Como tal, la cantidad de dinero que se movió.
      * @param fecha     La fecha en que se hizo el movimiento.
      */
+
+    /**
+     * Clase Movimiento que representa un registro financiero dentro del sistema.
+     * Esta clase permite manejar información sobre ingresos y egresos de la farmacia.
+     *
+     * @author Estudiante SENA
+     * @version 1.0
+     */
     public Movimiento(int id, String tipo, String categoria, double monto, Date fecha) {
         this.id = id;
         this.tipo = tipo;
@@ -30,6 +38,11 @@ public class Movimiento {
         this.monto = monto;
         this.fecha = fecha;
     }
+
+    /**
+     * Constructor vacío de la clase Movimiento.
+     * Se usa para crear objetos sin inicializar atributos de inmediato.
+     */
 
     public Movimiento() {
     }
