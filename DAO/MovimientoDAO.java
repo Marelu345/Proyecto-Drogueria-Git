@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-
 public class MovimientoDAO {
     public List<Movimiento> obtenerMovimientos() {
         List<Movimiento> movimientos = new ArrayList<>();
@@ -65,16 +64,10 @@ public class MovimientoDAO {
 
 
     public static boolean actualizarMovimiento(Movimiento movimiento) {
-        if (movimiento == null) {
-            throw new NullPointerException("El movimiento no puede ser nulo");
-        }
-
-        String sqlSelect = "SELECT Tipo, Monto FROM movimiento WHERE id_movimiento=?";
-        String sqlUpdate = "UPDATE movimiento SET Tipo=?, Categoria=?, Monto=?, fecha=? WHERE id_movimiento=?";
+        String sql = "SELECT Tipo, Monto FROM movimiento WHERE id_movimiento=?";
 
         try (Connection conexion = ConexionDB.getConnection();
-             PreparedStatement stmtSelect = conexion.prepareStatement(sqlSelect);
-             PreparedStatement stmtUpdate = conexion.prepareStatement(sqlUpdate)) {
+             PreparedStatement stmtSelect = conexion.prepareStatement(sql)) {
 
             stmtSelect.setInt(1, movimiento.getId());
             ResultSet rs = stmtSelect.executeQuery();
@@ -83,6 +76,8 @@ public class MovimientoDAO {
                 String tipoAnterior = rs.getString("Tipo");
                 double montoAnterior = rs.getDouble("Monto");
 
+                String sqlUpdate = "UPDATE movimiento SET Tipo=?, Categoria=?, Monto=?, fecha=? WHERE id_movimiento=?";
+                PreparedStatement stmtUpdate = conexion.prepareStatement(sqlUpdate);
                 stmtUpdate.setString(1, movimiento.getTipo());
                 stmtUpdate.setString(2, movimiento.getCategoria());
                 stmtUpdate.setDouble(3, movimiento.getMonto());
@@ -92,33 +87,30 @@ public class MovimientoDAO {
                 boolean actualizado = stmtUpdate.executeUpdate() > 0;
 
                 if (actualizado) {
-                    double ajuste = calcularAjuste(tipoAnterior, montoAnterior, movimiento);
+                    double ajuste = 0;
+
+
+                    if (tipoAnterior.equals(movimiento.getTipo())) {
+                        ajuste = movimiento.getMonto() - montoAnterior;
+                    } else {
+
+                        ajuste = tipoAnterior.equals("Ingreso") ? -montoAnterior : montoAnterior;
+                        ajuste += movimiento.getTipo().equals("Ingreso") ? movimiento.getMonto() : -movimiento.getMonto();
+                    }
+
+
                     CajaDAO.actualizarSaldoAutomatico(ajuste, movimiento.getTipo());
+
                 }
 
                 return actualizado;
             }
 
         } catch (SQLException e) {
-            throw new RuntimeException("Error al actualizar el movimiento", e);
+            e.printStackTrace();
         }
-
         return false;
     }
-
-    private static double calcularAjuste(String tipoAnterior, double montoAnterior, Movimiento movimiento) {
-        if (tipoAnterior.equals(movimiento.getTipo())) {
-            return movimiento.getMonto() - montoAnterior;
-        } else {
-            double ajuste = tipoAnterior.equals("Ingreso") ? - montoAnterior : montoAnterior;
-            ajuste += movimiento.getTipo().equals("Ingreso") ? movimiento.getMonto() :-movimiento.getMonto();
-            return ajuste;
-        }
-    }
-
-
-
-
 
     public  boolean eliminarMovimiento(int id) {
         String sqlD = "DELETE FROM movimiento WHERE id_movimiento=?";
@@ -140,7 +132,7 @@ public class MovimientoDAO {
 
                 if (eliminado) {
                     if (tipo.equals("Ingreso")) {
-                            CajaDAO.actualizarSaldoAutomatico(-monto, "Ingreso");
+                        CajaDAO.actualizarSaldoAutomatico(-monto, "Ingreso");
                     }else if (tipo.equals("Egreso")) {
                         CajaDAO.actualizarSaldoAutomatico(monto, "Ingreso");
                     }
