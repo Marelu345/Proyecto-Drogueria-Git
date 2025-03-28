@@ -79,6 +79,11 @@ public class Movimiento {
         this.monto = monto;
     }
 
+    /**
+     * Método para obtener la fecha del movimiento.
+     *
+     * @return fecha del movimiento.
+     */
     public Date getFecha() {
         return fecha;
     }
