@@ -38,8 +38,7 @@ public class VentanaPrincipal {
         ventanaPedidoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                PedidoAdmin pedidoAdmin = new PedidoAdmin();
-                pedidoAdmin.main(null);
+                PedidoAdmin.main(null);
             }
         });
         ventanaMovimientoButton.addActionListener(new ActionListener() {
