@@ -2,14 +2,27 @@ package Clases;
 
 import java.sql.Timestamp;
 import java.util.Date;
-
+/**
+ * Pues esta clase representa un movimiento de dinero dentro del sistema,
+ * ya sea que entre o salga dinero. Como tal, cada movimiento
+ * tiene su tipo, su categoría y la cantidad de plata que se movió.
+ */
 public class Movimiento {
     int id;
     String tipo;
     String categoria;
     double monto;
     Date fecha;
-
+    /**
+     * Este es el constructor que se usa para crear un movimiento con
+     * todos los datos necesarios.
+     *
+     * @param id        Pues este es el número único del movimiento.
+     * @param tipo      Aquí va si es un ingreso o un egreso.
+     * @param categoria La categoría del movimiento, tipo "Ingreso" o "Egreso".
+     * @param monto     Como tal, la cantidad de dinero que se movió.
+     * @param fecha     La fecha en que se hizo el movimiento.
+     */
     public Movimiento(int id, String tipo, String categoria, double monto, Date fecha) {
         this.id = id;
         this.tipo = tipo;
