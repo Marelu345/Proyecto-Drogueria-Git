@@ -146,24 +146,46 @@ public class PedidoAdmin {
     }
 
 
+
+
     /**
-     * Elimina un pedido seleccionado de la tabla.
-     * Si no hay una fila seleccionada, muestra un mensaje de advertencia.
-     * Si la eliminación es exitosa, actualiza la tabla con los datos actualizados.
-     * En caso de error, muestra un mensaje de error y registra la excepción en la consola.
+     * Método para eliminar un pedido seleccionado de la tabla.
+     * Verifica si hay un pedido seleccionado antes de proceder con la eliminación.
+     * Muestra mensajes al usuario según el resultado del proceso.
      */
-
-
     public void eliminarPedido() {
+
         try {
+            /**
+             * Pues aquí obtenemos la fila que el usuario seleccionó en la tabla.
+             * Si no seleccionó nada, devuelve -1.
+             */
             int filaSeleccionada = table.getSelectedRow();
+            /**
+             * Entonces verificamos si no hay ninguna fila seleccionada.
+             * Si es así, mostramos un mensaje diciendo que debe seleccionar un pedido.
+             */
             if (filaSeleccionada == -1) {
                 JOptionPane.showMessageDialog(null, "Selecciona un pedido para eliminar.");
                 return;
             }
+            /**
+             * Aquí obtenemos el ID del pedido que está en la fila seleccionada.
+             * Como el ID está en la primera columna (índice 0), lo tomamos de ahí.
+             */
 
             int id_pedido = (int) table.getValueAt(filaSeleccionada, 0);
+            /**
+             * Pues entonces llamamos al método eliminar del pedidoDAO.
+             * Esto intenta eliminar el pedido de la base de datos.
+             */
             boolean eliminado = pedidoDAO.eliminar(id_pedido);
+
+            /**
+             * Aquí verificamos si el pedido se eliminó o no.
+             * Si se eliminó, mostramos un mensaje de éxito y actualizamos la tabla.
+             * Si no, mostramos un mensaje diciendo que hubo un error.
+             */
 
             if (eliminado) {
                 JOptionPane.showMessageDialog(null, "Pedido eliminado correctamente.");
@@ -171,6 +193,11 @@ public class PedidoAdmin {
             } else {
                 JOptionPane.showMessageDialog(null, "Error al eliminar el pedido.");
             }
+
+            /**
+             * Si pasa un error inesperado, mostramos un mensaje de error al usuario.
+             * También imprimimos el error en la consola para que se pueda revisar qué pasó.
+             */
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Ocurrió un error al eliminar el pedido.", "Error", JOptionPane.ERROR_MESSAGE);
