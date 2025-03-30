@@ -118,7 +118,7 @@ public class ClienteDAO {
     /**
      * Elimina un cliente de la base de datos basado en su ID.
      * @param id Identificador del cliente a eliminar.
-     * @return true si la eliminación fue exitosa, false en caso contrario.
+     * @return True si la eliminación fue exitosa, false en caso contrario.
      */
 
     public boolean eliminarCliente(String id) {
