@@ -264,7 +264,7 @@ public class VentanaClientes {
             JOptionPane.showMessageDialog(null, "Cliente eliminado exitosamente.");
             obtenerClientes();
         } else {
-            JOptionPane.showMessageDialog(null, "Error al eliminar cliente.");
+            JOptionPane.showMessageDialog(null, "Error al eliminar cliente, el cliente esta asociado a un pedido.");
         }
     }
 
