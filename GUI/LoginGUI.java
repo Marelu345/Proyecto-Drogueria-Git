@@ -39,11 +39,18 @@ public class LoginGUI extends JDialog {
                 cliente = getIdentificarCliente(nombre, cedula);
 
                 if (cliente != null) {
-                    JOptionPane.showMessageDialog(LoginGUI.this, "Inicio de sesión exitoso", "Bienvenido", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(LoginGUI.this,
+                            "Bienvenido " + cliente.getNombre(),
+                            "Inicio exitoso",
+                            JOptionPane.INFORMATION_MESSAGE);
                     dispose();
-                    VentanaPedido.main(null);
+                    // Pasa el ID del cliente a VentanaPedido
+                    VentanaPedido.main(cliente.getId());
                 } else {
-                    JOptionPane.showMessageDialog(LoginGUI.this, "Nombre o Identificación incorrecta", "Intente otra vez", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(LoginGUI.this,
+                            "Credenciales incorrectas",
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

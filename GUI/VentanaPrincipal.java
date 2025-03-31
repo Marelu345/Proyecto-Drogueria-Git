@@ -12,6 +12,7 @@ public class VentanaPrincipal {
     private JButton ventanaPedidoButton;
     private JButton ventanaMovimientoButton;
     private JButton ventanaCajaButton;
+    private JButton ReportesButton;
 
     public VentanaPrincipal() {
         button1.addActionListener(new ActionListener() {
@@ -38,7 +39,7 @@ public class VentanaPrincipal {
         ventanaPedidoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                PedidoAdmin.main(null);
+                VentasGUI.main(null);
             }
         });
         ventanaMovimientoButton.addActionListener(new ActionListener() {
@@ -50,6 +51,13 @@ public class VentanaPrincipal {
 
             }
         });
+        ReportesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new ReportesVentasGUI();
+            }
+        });
+
         ventanaCajaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
