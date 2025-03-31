@@ -255,7 +255,7 @@ public class PedidoAdmin {
         frame.setContentPane(new PedidoAdmin().main);
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setSize(600, 600);
+        frame.setSize(600, 700);
         frame.setResizable(true);
         frame.setVisible(true);
 

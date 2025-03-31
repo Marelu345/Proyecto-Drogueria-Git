@@ -6,8 +6,18 @@ import Conexion.ConexionDB;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Clase DAO  para gestionar las operaciones relacionadas con los productos.
+ * Permite agregar, obtener, actualizar y eliminar productos en la base de datos.
+ */
 public class ProductoDAO {
+
+    /**
+     * Agrega un nuevo producto a la base de datos.
+     *
+     * @param producto Producto con los datos a registrar.
+     * @return True si el producto se agregó correctamente, False en caso contrario.
+     */
     public boolean agregarProducto(Producto producto) {
         String sql = "INSERT INTO producto (Nombre, Descripcion, Tipo, Precio_U, Stock, Stock_M) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -27,6 +37,11 @@ public class ProductoDAO {
         }
     }
 
+    /**
+     * Obtiene una lista de todos los productos registrados en la base de datos.
+     *
+     * @return Lista de objetos en Producto.
+     */
     public List<Producto> obtenerProductos() {
         List<Producto> productos = new ArrayList<>();
         String sql = "SELECT * FROM producto";
@@ -51,10 +66,16 @@ public class ProductoDAO {
         return productos;
     }
 
-    public boolean actualizarProducto(Producto producto)   {
+    /**
+     * Actualiza los datos de un producto en la base de datos.
+     *
+     * @param producto Producto con los nuevos datos.
+     * @return True si la actualización fue exitosa, False en caso contrario.
+     */
+    public boolean actualizarProducto(Producto producto) {
         String query = "UPDATE producto SET Nombre = ?, Descripcion = ? , Precio_U = ?, Stock = ?, Stock_M = ?, Tipo = ? WHERE id_producto = ?";
-        try (Connection conexion = ConexionDB.getConnection();
 
+        try (Connection conexion = ConexionDB.getConnection();
              PreparedStatement statement = conexion.prepareStatement(query)) {
             statement.setString(1, producto.getNombre());
             statement.setString(2, producto.getDescripcion());
@@ -70,8 +91,16 @@ public class ProductoDAO {
             return false;
         }
     }
+
+    /**
+     * Elimina un producto de la base de datos.
+     *
+     * @param id ID del producto a eliminar.
+     * @return True si el producto fue eliminado correctamente, False en caso contrario.
+     */
     public boolean eliminarProducto(String id) {
         String proctE = "DELETE FROM producto WHERE id_producto =?";
+
         try (Connection conexion = ConexionDB.getConnection();
              PreparedStatement stmt = conexion.prepareStatement(proctE)) {
             stmt.setString(1, id);
