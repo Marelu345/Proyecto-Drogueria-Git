@@ -58,9 +58,9 @@ public class MovimientoDAO {
         Connection conexion = null;
         try {
             conexion = ConexionDB.getConnection();
-            conexion.setAutoCommit(false); // Iniciar transacción
+            conexion.setAutoCommit(false);
 
-            // 1. Eliminar el impacto del movimiento antiguo (si existe)
+
             String sqlDeleteImpact = "SELECT Tipo, Monto FROM movimiento WHERE id_movimiento=?";
             try (PreparedStatement stmtSelect = conexion.prepareStatement(sqlDeleteImpact)) {
                 stmtSelect.setInt(1, movimiento.getId());
@@ -73,7 +73,7 @@ public class MovimientoDAO {
                 }
             }
 
-            // 2. Actualizar el movimiento con los nuevos valores
+
             String sqlUpdate = "UPDATE movimiento SET Tipo=?, Categoria=?, Monto=?, fecha=? WHERE id_movimiento=?";
             try (PreparedStatement stmtUpdate = conexion.prepareStatement(sqlUpdate)) {
                 stmtUpdate.setString(1, movimiento.getTipo());
@@ -84,13 +84,13 @@ public class MovimientoDAO {
                 stmtUpdate.executeUpdate();
             }
 
-            // 3. Aplicar el impacto del nuevo movimiento
+
             double nuevoAjuste = movimiento.getTipo().equals("Ingreso")
                     ? movimiento.getMonto()
                     : -movimiento.getMonto();
             CajaDAO.actualizarSaldoAutomatico(nuevoAjuste, movimiento.getTipo());
 
-            conexion.commit(); // Confirmar transacción
+            conexion.commit();
             return true;
 
         } catch (SQLException e) {
