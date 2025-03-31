@@ -36,20 +36,6 @@ public class VentanaCliente {
 
 
 
-        button2.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                actualizarCliente();
-                mostrarUltimoCliente();
-            }
-
-        });
-
-        button4.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                LoginGUI.main(null);
-                mostrarUltimoCliente();
-            }
-        });
 
 
         //button3.addActionListener(e -> { InicioPrincipal.main(null);});
@@ -105,26 +91,6 @@ public class VentanaCliente {
         }
 
     }
-
-
-    public void actualizarCliente() {
-        if (filaSeleccionada >= 0) {
-            int id = (int) table1.getValueAt(filaSeleccionada, 0);
-            Cliente clienteActualizado = new Cliente(id, textField1.getText(),textField2.getText(), textField3.getText(), textField4.getText());
-            if (clienteDAO.actualizarCliente(clienteActualizado)) {
-                JOptionPane.showMessageDialog(null, "Informacion actualizado.");
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Seleccione tu infromacion de la tabla.");
-        }
-    }
-
-
-
-
-
-
-
     public static void main(String[] args) {
         VentanaCliente ventana = new VentanaCliente();
         JFrame frame = new JFrame("Registro de CLiente");
