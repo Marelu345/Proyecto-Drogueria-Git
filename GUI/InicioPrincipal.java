@@ -35,7 +35,7 @@ public class InicioPrincipal {
         frame.setContentPane(new InicioPrincipal().main);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
-        frame.setSize(500, 500);
+        frame.setSize(1040, 700);
         frame.setResizable(true);
         frame.setVisible(true);
     }
