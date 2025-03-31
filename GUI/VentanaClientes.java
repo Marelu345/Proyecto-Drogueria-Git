@@ -157,7 +157,7 @@ public class VentanaClientes {
                         tabla.addCell(cell);
                     }
 
-                    try (Connection cn = DriverManager.getConnection("jdbc:mysql://localhost/farmacia", "root", "");
+                    try (Connection cn = DriverManager.getConnection("jdbc:mysql://localhost/drogueria", "root", "");
                          PreparedStatement pst = cn.prepareStatement("SELECT * FROM cliente");
                          ResultSet rs = pst.executeQuery()) {
 
