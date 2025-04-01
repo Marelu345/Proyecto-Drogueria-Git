@@ -41,6 +41,7 @@ public class VentasGUI {
     private JTextField textField2;
     private JButton enviarServerButton;
     private JTextArea AreaServer;
+    private JTextField textField11;
     private HashMap<String, Integer> clientesMap = new HashMap<>();
     private HashMap<String, Integer> productoMap = new HashMap<>();
     private HashMap<String, Integer> categoriaMap = new HashMap<>();
@@ -90,11 +91,11 @@ public class VentasGUI {
         enviarServerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (out != null && !textField1.getText().isEmpty()) {
-                    String sendMessage = textField1.getText();
+                if (out != null && !textField11.getText().isEmpty()) {
+                    String sendMessage = textField11.getText();
                     out.println(sendMessage);
                     AreaServer.append("Servidor: " + sendMessage + "\n");
-                    textField1.setText("");
+                    textField11.setText("");
                     if (sendMessage.equalsIgnoreCase("salir")) {
                         cerrarConnections();
                     }
