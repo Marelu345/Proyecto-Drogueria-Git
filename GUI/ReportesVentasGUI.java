@@ -18,7 +18,7 @@ public class ReportesVentasGUI extends JFrame {
     private JTable tablaReportes;
     private JPanel main;
     private ConexionDB conexionDB;
-    private Color backgroundColor = new Color(240, 240, 240); // Fondo claro
+    private Color backgroundColor = new Color(212, 229, 247); // Fondo claro
     private Color sectionColor = new Color(80, 160, 220); // Color de sección (similar a la imagen)
     private Color buttonColor = new Color(60, 140, 200); // Color de botón
 
