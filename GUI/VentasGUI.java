@@ -184,7 +184,7 @@ import java.io.File;
                 document.add(new Paragraph("\n\n\n"));
                 document.add(new Paragraph("\n\n\n"));
 
-                Paragraph titulo = new Paragraph("FACTURA DE VENTA",
+                Paragraph titulo = new Paragraph("Factura de Venta",
                         FontFactory.getFont("Tahoma", 22, Font.BOLD, new BaseColor(50, 120, 180)));
                 titulo.setAlignment(Element.ALIGN_CENTER);
                 titulo.setSpacingAfter(20f);
