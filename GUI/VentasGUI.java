@@ -1,6 +1,7 @@
 package GUI;
 
 import Conexion.ConexionDB;
+import DAO.VentaDAO;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -56,6 +57,7 @@ import java.io.File;
         private ConexionDB conexionDB = new ConexionDB();
         private GestionPedidoDAO gestionPedidoDAO = new GestionPedidoDAO();
         private GestionVentasDAO gestionVentasDAO = new GestionVentasDAO();
+        private VentaDAO ventaDAO = new VentaDAO();
         private ServerSocket serverSocket;
         private Socket clientSocket;
         private PrintWriter out;
@@ -112,6 +114,23 @@ import java.io.File;
                     }
                 }
             });
+            eliminarButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    eliminarVentaA();
+                    visualizarOrden();
+                    ultimoP();
+                }
+            });
+            eliminarButton1.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    eliminarVentaC();
+                    visualizarOrden();
+                    ultimoP();
+                }
+            });
+
         }
 
         public void ultimoP() {
@@ -588,6 +607,80 @@ import java.io.File;
                 e.printStackTrace();
             }
         }
+        public void eliminarVentaA() {
+            try {
+                int filaSeleccionada = table1.getSelectedRow();
+                if (filaSeleccionada == -1) {
+                    JOptionPane.showMessageDialog(null, "Selecciona un pedido para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                int id_venta = Integer.parseInt(table1.getValueAt(filaSeleccionada, 0).toString());
+                int confirmacion = JOptionPane.showConfirmDialog(null,
+                        "¿Estás seguro de eliminar este pedido?",
+                        "Confirmar eliminación",
+                        JOptionPane.YES_NO_OPTION);
+
+                if (confirmacion != JOptionPane.YES_OPTION) {
+                    return;
+                }
+                boolean eliminado = ventaDAO.eliminar(id_venta);
+
+                if (eliminado) {
+                    JOptionPane.showMessageDialog(null, "Pedido eliminado correctamente.");
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al eliminar pedido.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null,
+                        "Error al eliminar pedido: " + e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
+        }
+
+        public void eliminarVentaC() {
+            try {
+                int filaSeleccionada = table2.getSelectedRow();
+                if (filaSeleccionada == -1) {
+                    JOptionPane.showMessageDialog(null, "Selecciona una venta para eliminar.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                int id_pedido = Integer.parseInt(table2.getValueAt(filaSeleccionada, 0).toString());
+                int confirmacion = JOptionPane.showConfirmDialog(null,
+                        "¿Estás seguro de eliminar esta venta?",
+                        "Confirmar eliminación",
+                        JOptionPane.YES_NO_OPTION);
+
+                if (confirmacion != JOptionPane.YES_OPTION) {
+                    return;
+                }
+
+                boolean ventasEliminadas = ventaDAO.eliminar(id_pedido);
+                boolean pedidoEliminado = false;
+                if (ventasEliminadas) {
+                    pedidoEliminado = gestionPedidoDAO.eliminar(id_pedido);
+                }
+
+                if (pedidoEliminado) {
+                    JOptionPane.showMessageDialog(null, "Venta eliminada correctamente.");
+                } else {
+                    JOptionPane.showMessageDialog(null,
+                            "Error al eliminar la venta.",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                }
+
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null,
+                        "Error al eliminar la venta: " + e.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                e.printStackTrace();
+            }
+        }
+
 
         public int obtenerSubtotalPedido(int idPedido) {
             int subtotal = 0;

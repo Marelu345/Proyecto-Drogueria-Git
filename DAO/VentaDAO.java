@@ -49,4 +49,28 @@ public class VentaDAO {
         }
         return ventas;
     }
+
+    public boolean eliminar(int id) {
+
+        Connection con = ConexionDB.getConnection();
+
+        String query = "DELETE FROM venta WHERE id_venta = ?";
+
+        try {
+
+            PreparedStatement pst = con.prepareStatement(query);
+            pst.setInt(1, id);
+            pst.executeUpdate();
+
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+            return false;
+
+        }
+
+        return true;
+
+    }
 }
