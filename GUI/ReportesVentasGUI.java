@@ -1,7 +1,6 @@
 package GUI;
 
 import Conexion.ConexionDB;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -19,7 +18,9 @@ public class ReportesVentasGUI extends JFrame {
     private JTable tablaReportes;
     private JPanel main;
     private ConexionDB conexionDB;
-    private Color baseColor = new Color(80, 160, 220); // Color más claro (80,160,220)
+    private Color backgroundColor = new Color(240, 240, 240); // Fondo claro
+    private Color sectionColor = new Color(80, 160, 220); // Color de sección (similar a la imagen)
+    private Color buttonColor = new Color(60, 140, 200); // Color de botón
 
     public ReportesVentasGUI() {
         conexionDB = new ConexionDB();
@@ -27,94 +28,123 @@ public class ReportesVentasGUI extends JFrame {
     }
 
     public void initialize() {
-        frame = new JFrame("Reportes de Ventas");
-        frame.setSize(800, 600);
+        frame = new JFrame("Reportes de Ventas - Caja");
+        frame.setSize(900, 650);
         frame.setLayout(new BorderLayout());
-        frame.getContentPane().setBackground(baseColor);
+        frame.getContentPane().setBackground(backgroundColor);
 
-        // Panel superior con controles
-        JPanel panelSuperior = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 15));
-        panelSuperior.setBackground(baseColor);
-        panelSuperior.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        // Panel de título de sección (similar al de la imagen)
+        JPanel sectionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        sectionPanel.setBackground(sectionColor);
+        sectionPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-        // Componentes con estilo
+        JLabel sectionTitle = new JLabel("REPORTES");
+        sectionTitle.setForeground(Color.WHITE);
+        sectionTitle.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        sectionPanel.add(sectionTitle);
+
+        // Panel principal de controles
+        JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 15));
+        controlPanel.setBackground(backgroundColor);
+        controlPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 10, 20));
+
+        // Componentes con nuevo estilo
+        JLabel etiqueta = new JLabel("Tipo de Reporte:");
+        etiqueta.setForeground(Color.DARK_GRAY);
+        etiqueta.setFont(new Font("Segoe UI", Font.BOLD, 14));
+
         tipoReporteCombo = new JComboBox<>(new String[]{"Diario", "Semanal", "Mensual", "Stock Minimo"});
         estiloComponente(tipoReporteCombo);
 
         generarButton = new JButton("Generar Reporte");
         estiloBoton(generarButton);
 
-        // Etiqueta con estilo
-        JLabel etiqueta = new JLabel("Tipo de Reporte:");
-        etiqueta.setForeground(Color.WHITE);
-        etiqueta.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        controlPanel.add(etiqueta);
+        controlPanel.add(tipoReporteCombo);
+        controlPanel.add(generarButton);
 
-        panelSuperior.add(etiqueta);
-        panelSuperior.add(tipoReporteCombo);
-        panelSuperior.add(generarButton);
+        // Panel de tabla con bordes
+        JPanel tablePanel = new JPanel(new BorderLayout());
+        tablePanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 20));
+        tablePanel.setBackground(backgroundColor);
 
-        // Tabla con estilo
+        // Tabla con nuevo estilo
         tablaReportes = new JTable();
         estiloTabla(tablaReportes);
 
         JScrollPane scrollPane = new JScrollPane(tablaReportes);
+        scrollPane.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createTitledBorder("Resultados del Reporte"),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)
+        ));
         scrollPane.getViewport().setBackground(Color.WHITE);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder(0, 15, 15, 15));
 
-        frame.add(panelSuperior, BorderLayout.NORTH);
-        frame.add(scrollPane, BorderLayout.CENTER);
+        tablePanel.add(scrollPane, BorderLayout.CENTER);
+
+        // Construcción del frame principal
+        frame.add(sectionPanel, BorderLayout.NORTH);
+        frame.add(controlPanel, BorderLayout.CENTER);
+        frame.add(tablePanel, BorderLayout.SOUTH);
 
         generarButton.addActionListener(e -> generarReporte());
 
+        frame.setLocationRelativeTo(null);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
     }
 
-    // Métodos de estilo reutilizables
-    public void estiloComponente(JComponent componente) {
+    // Métodos de estilo actualizados
+    private void estiloComponente(JComponent componente) {
         componente.setBackground(Color.WHITE);
         componente.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         componente.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(baseColor.darker(), 1),
-                BorderFactory.createEmptyBorder(5, 8, 5, 8)
+                BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
+                BorderFactory.createEmptyBorder(8, 12, 8, 12)
         ));
     }
 
-    public void estiloBoton(JButton boton) {
-        boton.setBackground(baseColor.brighter());
+    private void estiloBoton(JButton boton) {
+        boton.setBackground(buttonColor);
         boton.setForeground(Color.WHITE);
         boton.setFont(new Font("Segoe UI", Font.BOLD, 14));
         boton.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.WHITE, 2),
+                BorderFactory.createLineBorder(buttonColor.darker(), 1),
                 BorderFactory.createEmptyBorder(8, 20, 8, 20)
         ));
         boton.setFocusPainted(false);
 
-        // Efecto hover
+        // Efecto hover mejorado
         boton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                boton.setBackground(baseColor.brighter().brighter());
+                boton.setBackground(buttonColor.brighter());
+                boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                boton.setBackground(baseColor.brighter());
+                boton.setBackground(buttonColor);
             }
         });
     }
 
-    public void estiloTabla(JTable tabla) {
+    private void estiloTabla(JTable tabla) {
         tabla.setBackground(Color.WHITE);
-        tabla.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        tabla.setGridColor(baseColor.darker());
-        tabla.setSelectionBackground(baseColor.brighter());
+        tabla.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        tabla.setGridColor(new Color(230, 230, 230));
+        tabla.setSelectionBackground(sectionColor);
         tabla.setSelectionForeground(Color.WHITE);
-        tabla.setRowHeight(25);
+        tabla.setRowHeight(28);
+        tabla.setShowGrid(true);
+        tabla.setIntercellSpacing(new Dimension(0, 1));
 
-        // Encabezado de tabla
+        // Encabezado de tabla mejorado
         JTableHeader header = tabla.getTableHeader();
-        header.setBackground(baseColor);
+        header.setBackground(sectionColor);
         header.setForeground(Color.WHITE);
         header.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        header.setBorder(BorderFactory.createEmptyBorder());
+        header.setPreferredSize(new Dimension(header.getWidth(), 32));
     }
 
+    // Los métodos de generación de reportes permanecen iguales
     private void generarReporte() {
         String tipoReporte = (String) tipoReporteCombo.getSelectedItem();
         DefaultTableModel modelo = new DefaultTableModel();
@@ -127,7 +157,7 @@ public class ReportesVentasGUI extends JFrame {
         }
 
         tablaReportes.setModel(modelo);
-        estiloTabla(tablaReportes); // Asegurar que se mantengan los estilos
+        estiloTabla(tablaReportes);
     }
 
     public DefaultTableModel generarReporteDiario() {
